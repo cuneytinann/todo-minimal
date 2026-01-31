@@ -1,0 +1,1336 @@
+<!doctype html>
+<html lang="tr" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nested To-Do (Tek Dosya)</title>
+  <style>
+    :root{
+      /* LIGHT (default) */
+      --bg: #ffffff;
+      --bg2: #f4f6f8;
+      --panel: #ffffff;
+      --panel2: #fbfcfd;
+      --text: #0b1220;
+      --muted: #5b6675;
+      --border: #d6dde6;
+      --accent: #0b63ff;
+      --danger: #d92c4a;
+      --ok: #0d8a5a;
+
+      --r: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    html[data-theme="dark"]{
+      --bg: #0b0f14;
+      --bg2: #0b0f14;
+      --panel: #111822;
+      --panel2: #0f1620;
+      --text: #e6edf3;
+      --muted: #98a6b3;
+      --border: #223044;
+      --accent: #5aa9ff;
+      --danger: #ff5a7a;
+      --ok: #3ddc97;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: var(--sans);
+      background: radial-gradient(1200px 800px at 20% 10%, var(--bg2) 0%, var(--bg) 55%);
+      color: var(--text);
+    }
+
+    .app{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .topbar{
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.7));
+      border-radius: var(--r);
+      box-shadow: 0 10px 30px rgba(0,0,0,.10);
+    }
+
+    html[data-theme="dark"] .topbar{
+      background: linear-gradient(180deg, rgba(17,24,34,.9), rgba(15,22,32,.85));
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    .brand{
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 220px;
+    }
+    .brand .title{
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .brand .sub{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.2;
+    }
+
+    .actions{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    button, .btn{
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1;
+      transition: transform .05s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;
+      user-select: none;
+    }
+    html[data-theme="dark"] button,
+    html[data-theme="dark"] .btn{
+      background: #0f1723;
+    }
+    button:hover{
+      border-color: rgba(11,99,255,.55);
+      box-shadow: 0 0 0 3px rgba(11,99,255,.10);
+    }
+    html[data-theme="dark"] button:hover{
+      border-color: rgba(90,169,255,.6);
+      box-shadow: 0 0 0 3px rgba(90,169,255,.15);
+    }
+    button:active{ transform: translateY(1px); }
+
+    button.primary{
+      border-color: rgba(11,99,255,.45);
+      background: rgba(11,99,255,.08);
+    }
+    html[data-theme="dark"] button.primary{
+      border-color: rgba(90,169,255,.55);
+      background: rgba(90,169,255,.12);
+    }
+
+    button.danger{
+      border-color: rgba(217,44,74,.45);
+      background: rgba(217,44,74,.08);
+    }
+    html[data-theme="dark"] button.danger{
+      border-color: rgba(255,90,122,.55);
+      background: rgba(255,90,122,.12);
+    }
+
+    button.ghost{
+      background: transparent;
+    }
+
+    input[type="file"]{ display: none; }
+    .filelabel{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .meta{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      padding: 6px 10px;
+      border: 1px dashed rgba(214,221,230,.95);
+      border-radius: 10px;
+      background: rgba(0,0,0,.02);
+    }
+    html[data-theme="dark"] .meta{
+      border-color: rgba(34,48,68,.9);
+      background: rgba(0,0,0,.12);
+    }
+
+    .lists{
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .lists.two-col{
+      flex-direction: row;
+      align-items: flex-start;
+    }
+    .lists-col{
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .list-card{
+      width: 100%;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.80));
+      border-radius: var(--r);
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    html[data-theme="dark"] .list-card{
+      background: linear-gradient(180deg, rgba(17,24,34,.9), rgba(15,22,32,.82));
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    }
+
+    @media (max-width: 980px){
+      /* Mobile: JS yeniden render ederek tek kolona döner.
+         (Bu kural sadece emniyet supabı olarak dursun.) */
+      .lists.two-col{ flex-direction: column; }
+    }
+
+    .list-head{
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 12px 10px 12px;
+      border-bottom: 1px solid rgba(214,221,230,.9);
+    }
+    html[data-theme="dark"] .list-head{
+      border-bottom-color: rgba(34,48,68,.8);
+    }
+
+    .list-title{
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .title-input{
+      width: 100%;
+      min-width: 120px;
+      border: 1px solid rgba(214,221,230,.95);
+      background: rgba(0,0,0,.02);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 14px;
+      outline: none;
+    }
+    html[data-theme="dark"] .title-input{
+      border-color: rgba(34,48,68,.9);
+      background: rgba(0,0,0,.12);
+    }
+    .title-input:focus{
+      border-color: rgba(11,99,255,.65);
+      box-shadow: 0 0 0 3px rgba(11,99,255,.12);
+    }
+    html[data-theme="dark"] .title-input:focus{
+      border-color: rgba(90,169,255,.7);
+      box-shadow: 0 0 0 3px rgba(90,169,255,.15);
+    }
+
+    /* Order controls (lists + items) */
+    .order-wrap{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 8px;
+      border: 1px solid rgba(214,221,230,.95);
+      background: rgba(0,0,0,.02);
+      border-radius: 10px;
+      flex: 0 0 auto;
+      user-select: none;
+    }
+    html[data-theme="dark"] .order-wrap{
+      border-color: rgba(34,48,68,.9);
+      background: rgba(0,0,0,.12);
+    }
+    .order-tag{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1;
+    }
+    .order-input{
+      width: 64px;
+      border: 1px solid rgba(214,221,230,.95);
+      background: #ffffff;
+      color: var(--text);
+      padding: 6px 6px;
+      border-radius: 9px;
+      font-weight: 800;
+      font-size: 12px;
+      text-align: center;
+      outline: none;
+    }
+    html[data-theme="dark"] .order-input{
+      background: #0f1723;
+      border-color: rgba(34,48,68,.85);
+    }
+    .order-input:focus{
+      border-color: rgba(11,99,255,.65);
+      box-shadow: 0 0 0 3px rgba(11,99,255,.10);
+    }
+    html[data-theme="dark"] .order-input:focus{
+      border-color: rgba(90,169,255,.7);
+      box-shadow: 0 0 0 3px rgba(90,169,255,.12);
+    }
+    .order-input.item-order{ width: 56px; }
+
+    .list-tools{
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(214,221,230,.95);
+      color: var(--muted);
+      background: rgba(0,0,0,.02);
+      white-space: nowrap;
+    }
+    html[data-theme="dark"] .pill{
+      border-color: rgba(34,48,68,.9);
+      background: rgba(0,0,0,.12);
+    }
+
+    .list-add{
+      display: flex;
+      gap: 8px;
+      padding: 10px 12px 12px 12px;
+      border-bottom: 1px solid rgba(214,221,230,.75);
+    }
+    html[data-theme="dark"] .list-add{
+      border-bottom-color: rgba(34,48,68,.6);
+    }
+
+    .add-input{
+      flex: 1;
+      border: 1px solid rgba(214,221,230,.95);
+      background: rgba(0,0,0,.02);
+      color: var(--text);
+      padding: 10px 10px;
+      border-radius: 10px;
+      outline: none;
+      font-size: 13px;
+    }
+    html[data-theme="dark"] .add-input{
+      border-color: rgba(34,48,68,.9);
+      background: rgba(0,0,0,.12);
+    }
+    .add-input:focus{
+      border-color: rgba(11,99,255,.65);
+      box-shadow: 0 0 0 3px rgba(11,99,255,.10);
+    }
+    html[data-theme="dark"] .add-input:focus{
+      border-color: rgba(90,169,255,.7);
+      box-shadow: 0 0 0 3px rgba(90,169,255,.12);
+    }
+
+    .list-body{
+      padding: 10px 12px 14px 12px;
+      overflow: visible;
+    }
+
+    .items{
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      gap: 10px;
+    }
+    .items.vertical{ flex-direction: column; }
+    .items.horizontal{ flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+
+    .item{
+      border: 1px solid rgba(214,221,230,.95);
+      background: rgba(0,0,0,.02);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+    html[data-theme="dark"] .item{
+      border-color: rgba(34,48,68,.85);
+      background: rgba(0,0,0,.10);
+    }
+
+    .items.horizontal > .item{
+      width: calc(50% - 5px);
+      min-width: 280px;
+    }
+    @media (max-width: 600px){
+      .items.horizontal > .item{ width: 100%; min-width: 0; }
+    }
+
+    .item-row{
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .ck{
+      margin-top: 2px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .text{
+      flex: 1;
+      min-width: 0;
+      border: 1px solid rgba(214,221,230,.95);
+      background: rgba(0,0,0,.02);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 10px;
+      outline: none;
+      font-size: 13px;
+    }
+    html[data-theme="dark"] .text{
+      border-color: rgba(34,48,68,.85);
+      background: rgba(0,0,0,.10);
+    }
+    .text:focus{
+      border-color: rgba(11,99,255,.65);
+      box-shadow: 0 0 0 3px rgba(11,99,255,.10);
+    }
+    html[data-theme="dark"] .text:focus{
+      border-color: rgba(90,169,255,.65);
+      box-shadow: 0 0 0 3px rgba(90,169,255,.10);
+    }
+
+    .text.done{
+      text-decoration: line-through;
+      color: rgba(11,18,32,.55);
+      border-color: rgba(13,138,90,.28);
+    }
+    html[data-theme="dark"] .text.done{
+      color: rgba(230,237,243,.65);
+      border-color: rgba(61,220,151,.25);
+    }
+
+    .item-actions{
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-top: -2px;
+    }
+
+    .mini{
+      padding: 7px 10px;
+      font-size: 12px;
+      border-radius: 10px;
+    }
+    .mini.ok{
+      border-color: rgba(13,138,90,.35);
+      background: rgba(13,138,90,.08);
+    }
+    html[data-theme="dark"] .mini.ok{
+      border-color: rgba(61,220,151,.4);
+      background: rgba(61,220,151,.10);
+    }
+
+    .mini.del{
+      border-color: rgba(217,44,74,.35);
+      background: rgba(217,44,74,.08);
+    }
+    html[data-theme="dark"] .mini.del{
+      border-color: rgba(255,90,122,.5);
+      background: rgba(255,90,122,.10);
+    }
+
+    .children{
+      margin: 0 0 0 22px;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      gap: 10px;
+    }
+    .children.vertical{ flex-direction: column; }
+    .children.horizontal{ flex-direction: row; flex-wrap: wrap; }
+    .children .item{
+      background: rgba(0,0,0,.01);
+    }
+    html[data-theme="dark"] .children .item{
+      background: rgba(0,0,0,.08);
+    }
+
+    .empty{
+      color: var(--muted);
+      font-size: 13px;
+      font-family: var(--mono);
+      padding: 8px 2px;
+    }
+
+    .toast{
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      max-width: min(520px, calc(100vw - 32px));
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 12px 40px rgba(0,0,0,.18);
+      color: var(--text);
+      font-size: 13px;
+      display: none;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    html[data-theme="dark"] .toast{
+      background: rgba(17,24,34,.92);
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    }
+    .toast.show{ display: flex; }
+    .toast .tag{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(11,99,255,.45);
+      background: rgba(11,99,255,.08);
+      color: var(--text);
+      white-space: nowrap;
+      margin-top: 1px;
+    }
+    html[data-theme="dark"] .toast .tag{
+      border-color: rgba(90,169,255,.55);
+      background: rgba(90,169,255,.10);
+    }
+    .toast .msg{ color: var(--text); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">Nested To-Do (Tek Dosya)</div>
+        <div class="sub">
+          Her şey tarayıcı geçmişine kaydedilir. Ayrıca “İndir / Yükle” ile harici yedek alınabilir.
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="btnTheme" class="ghost" title="Açık / Koyu tema">Tema: Açık</button>
+
+        <button id="btnNewList" class="primary">+ Yeni Liste</button>
+
+        <button id="btnDownload" class="ghost">İndir (JSON)</button>
+
+        <label class="btn filelabel" for="fileUpload" title="Yedek dosyasını içe aktar">
+          Yükle (JSON)
+        </label>
+        <input id="fileUpload" type="file" accept="application/json,.json" />
+
+        <div class="meta" id="saveMeta">Kayıt: —</div>
+      </div>
+    </div>
+
+    <div class="lists" id="lists"></div>
+  </div>
+
+  <div class="toast" id="toast">
+    <div class="tag" id="toastTag">BİLGİ</div>
+    <div class="msg" id="toastMsg"></div>
+  </div>
+
+<script>
+(() => {
+  "use strict";
+
+  const LS_KEY = "nested_todo_v1";
+  const VERSION = 1;
+
+  /** @type {{version:number, updatedAt:number, theme:"light"|"dark", lists:Array<ListState>}} */
+  let state = { version: VERSION, updatedAt: Date.now(), theme: "light", lists: [] };
+
+  /** Focus after render */
+  let pendingFocus = { listId: null, itemId: null };
+
+  let saveTimer = null;
+
+  const $lists = document.getElementById("lists");
+  const $meta  = document.getElementById("saveMeta");
+  const $toast = document.getElementById("toast");
+  const $toastTag = document.getElementById("toastTag");
+  const $toastMsg = document.getElementById("toastMsg");
+  const $btnTheme = document.getElementById("btnTheme");
+
+  $btnTheme.addEventListener("click", () => {
+    state.theme = (state.theme === "light") ? "dark" : "light";
+    applyTheme();
+    touch(true);
+  });
+
+  document.getElementById("btnNewList").addEventListener("click", () => {
+    const list = makeList("Yeni Liste");
+    state.lists.unshift(list);
+    touch();
+    pendingFocus = { listId: list.id, itemId: null };
+    render();
+    toast("OK", "Yeni liste oluşturuldu.");
+  });
+
+  document.getElementById("btnDownload").addEventListener("click", () => {
+    downloadBackup();
+  });
+
+  document.getElementById("fileUpload").addEventListener("change", async (e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const obj = JSON.parse(text);
+      const migrated = validateAndMigrate(obj);
+      state = migrated;
+      applyTheme();
+      touch();
+      render();
+      toast("OK", "Yedek dosyası yüklendi ve uygulandı.");
+    } catch (err) {
+      console.error(err);
+      toast("HATA", "Yükleme başarısız: Geçersiz JSON veya beklenmeyen format.");
+    }
+  });
+
+  // Event delegation: clicks
+  $lists.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+
+    const listId = btn.dataset.listId;
+    const itemId = btn.dataset.itemId;
+    const action = btn.dataset.action;
+
+    if (!action) return;
+
+    if (action === "deleteList") {
+      const list = findList(listId);
+      if (!list) return;
+      const ok = confirm(`"${list.title || "Liste"}" silinsin mi?`);
+      if (!ok) return;
+      state.lists = state.lists.filter(x => x.id !== listId);
+      touch();
+      render();
+      toast("OK", "Liste silindi.");
+      return;
+    }
+
+    if (action === "addRootItem") {
+      const input = document.querySelector(`input[data-role="addRoot"][data-list-id="${cssEsc(listId)}"]`);
+      if (!input) return;
+      const text = (input.value || "").trim();
+      if (!text) return;
+      const list = findList(listId);
+      if (!list) return;
+
+      const item = makeItem(text);
+      list.items.push(item);
+      input.value = "";
+      touch();
+      pendingFocus = { listId, itemId: item.id };
+      render();
+      return;
+    }
+
+    if (action === "addChild") {
+      const list = findList(listId);
+      if (!list) return;
+      const target = findItem(list.items, itemId);
+      if (!target) return;
+
+      const child = makeItem("");
+      target.item.children.push(child);
+      touch();
+      pendingFocus = { listId, itemId: child.id };
+      render();
+      toast("OK", "Alt görev eklendi (metnini yaz).");
+      return;
+    }
+
+    if (action === "deleteItem") {
+      const list = findList(listId);
+      if (!list) return;
+      const ok = confirm("Bu madde (alt maddeleriyle birlikte) silinsin mi?");
+      if (!ok) return;
+
+      deleteItemById(list, itemId);
+      touch();
+      render();
+      return;
+    }
+  });
+
+  // Event delegation: checkbox changes
+  $lists.addEventListener("change", (e) => {
+    const ck = e.target;
+    if (!(ck instanceof HTMLInputElement) || ck.type !== "checkbox") return;
+
+    const listId = ck.dataset.listId;
+    const itemId = ck.dataset.itemId;
+
+    const list = findList(listId);
+    if (!list) return;
+
+    const found = findItem(list.items, itemId);
+    if (!found) return;
+
+    const checked = ck.checked;
+
+    if (found.item.children.length === 0) {
+      found.item.done = checked;
+    } else {
+      // Parent toggle: apply to all descendants for predictable behavior
+      setAllDesc(found.item, checked);
+      found.item.done = checked;
+    }
+
+    touch();
+    render();
+  });
+
+
+
+  // Event delegation: order changes (lists + items)
+  // - In-range [1..N] => SWAP
+  // - Out-of-range => MOVE to start/end
+  $lists.addEventListener("change", (e) => {
+    const el = e.target;
+    if (!(el instanceof HTMLInputElement)) return;
+
+    if (el.dataset.role === "listOrder") {
+      const listId = el.dataset.listId;
+      const idx = state.lists.findIndex(l => l.id === listId);
+      if (idx < 0) return;
+
+      const changed = reorderArraySwapOrMove(state.lists, idx, el.value);
+      if (!changed) { render(); return; }
+
+      touch();
+      render();
+      return;
+    }
+
+    if (el.dataset.role === "itemOrder") {
+      const listId = el.dataset.listId;
+      const itemId = el.dataset.itemId;
+      const list = findList(listId);
+      if (!list) return;
+
+      const found = findItemWithParent(list.items, itemId);
+      if (!found) return;
+
+      const changed = reorderArraySwapOrMove(found.parent, found.index, el.value);
+      if (!changed) { render(); return; }
+
+      touch();
+      render();
+      return;
+    }
+  });
+  // Event delegation: list title edit + item text edit
+  $lists.addEventListener("input", (e) => {
+    const el = e.target;
+    if (!(el instanceof HTMLInputElement)) return;
+
+    if (el.dataset.role === "listTitle") {
+      const listId = el.dataset.listId;
+      const list = findList(listId);
+      if (!list) return;
+      list.title = el.value;
+      touch(false);
+      return;
+    }
+
+    if (el.dataset.role === "itemText") {
+      const listId = el.dataset.listId;
+      const itemId = el.dataset.itemId;
+      const list = findList(listId);
+      if (!list) return;
+      const found = findItem(list.items, itemId);
+      if (!found) return;
+      found.item.text = el.value;
+      touch(false);
+      return;
+    }
+  });
+
+  // Add root item on Enter
+  $lists.addEventListener("keydown", (e) => {
+    const el = e.target;
+    if (!(el instanceof HTMLInputElement)) return;
+
+    if (e.key === "Enter" && (el.dataset.role === "listOrder" || el.dataset.role === "itemOrder")) {
+      e.preventDefault();
+      el.blur();
+      return;
+    }
+
+    if (e.key === "Enter" && el.dataset.role === "addRoot") {
+      e.preventDefault();
+      const listId = el.dataset.listId;
+      const btn = document.querySelector(`button[data-action="addRootItem"][data-list-id="${cssEsc(listId)}"]`);
+      if (btn) btn.click();
+    }
+  });
+
+  function applyTheme() {
+    const theme = (state.theme === "dark") ? "dark" : "light";
+    document.documentElement.dataset.theme = theme;
+    $btnTheme.textContent = `Tema: ${theme === "light" ? "Açık" : "Koyu"}`;
+  }
+
+  function touch(showToastOnSave = false) {
+    state.updatedAt = Date.now();
+    scheduleSave(showToastOnSave);
+  }
+
+  function scheduleSave(showToastOnSave) {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      saveToStorage();
+      if (showToastOnSave) toast("OK", "Kaydedildi.");
+    }, 220);
+  }
+
+  function saveToStorage() {
+    try {
+      syncOrders();
+      const payload = JSON.stringify(state);
+      localStorage.setItem(LS_KEY, payload);
+      updateMeta();
+    } catch (err) {
+      console.error(err);
+      toast("HATA", "Kaydedilemedi: Local Storage erişimi başarısız.");
+    }
+  }
+
+  function loadFromStorage() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (!raw) return;
+      const obj = JSON.parse(raw);
+      state = validateAndMigrate(obj);
+    } catch (err) {
+      console.error(err);
+      state = { version: VERSION, updatedAt: Date.now(), theme: "light", lists: [] };
+    }
+  }
+
+  function updateMeta() {
+    const d = new Date(state.updatedAt);
+    const pad = (n) => String(n).padStart(2, "0");
+    const s = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    $meta.textContent = `Kayıt: ${s}`;
+  }
+
+  function toast(tag, msg) {
+    $toastTag.textContent = tag;
+    $toastMsg.textContent = msg;
+    $toast.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => $toast.classList.remove("show"), 2600);
+  }
+
+  function downloadBackup() {
+    try {
+      syncOrders();
+      const payload = JSON.stringify(state, null, 2);
+      const blob = new Blob([payload], { type: "application/json" });
+
+      const d = new Date();
+      const pad = (n) => String(n).padStart(2, "0");
+      const name = `todo-yedek-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.json`;
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      toast("OK", "Yedek indirildi.");
+    } catch (err) {
+      console.error(err);
+      toast("HATA", "İndirme başarısız.");
+    }
+  }
+
+  /** Types */
+  /**
+   * @typedef {{id:string, text:string, done:boolean, children:Array<ItemState>}} ItemState
+   * @typedef {{id:string, title:string, layout:"vertical"|"horizontal", items:Array<ItemState>}} ListState
+   */
+
+  function makeId() {
+    if (crypto && typeof crypto.randomUUID === "function") return crypto.randomUUID();
+    return "id_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+  }
+
+  function makeItem(text) {
+    return { id: makeId(), order: 0, text: String(text || ""), done: false, children: [] };
+  }
+
+  function makeList(title) {
+    return { id: makeId(), order: 0, title: String(title || "Liste"), layout: "vertical", items: [] };
+  }
+
+  function findList(listId) {
+    return state.lists.find(l => l.id === listId) || null;
+  }
+
+  function findItem(items, itemId) {
+    for (const it of items) {
+      if (it.id === itemId) return { item: it };
+      const sub = findItem(it.children, itemId);
+      if (sub) return sub;
+    }
+    return null;
+  }
+
+
+  function findItemWithParent(items, itemId) {
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      if (it.id === itemId) return { parent: items, index: i, item: it };
+      if (it.children && it.children.length) {
+        const sub = findItemWithParent(it.children, itemId);
+        if (sub) return sub;
+      }
+    }
+    return null;
+  }
+
+  // If target position is within [1..N] => SWAP.
+  // If out-of-range => MOVE to start/end.
+  function reorderArraySwapOrMove(arr, fromIndex, rawPos) {
+    const n = arr.length;
+    const raw = Number(rawPos);
+    if (!Number.isFinite(raw)) return false;
+
+    const desiredPos = Math.trunc(raw);
+
+    if (desiredPos >= 1 && desiredPos <= n) {
+      const toIndex = desiredPos - 1;
+      if (toIndex === fromIndex) return false;
+      const tmp = arr[fromIndex];
+      arr[fromIndex] = arr[toIndex];
+      arr[toIndex] = tmp;
+      return true;
+    }
+
+    const [moved] = arr.splice(fromIndex, 1);
+    const insertIndex = (desiredPos < 1) ? 0 : arr.length; // start or end
+    arr.splice(insertIndex, 0, moved);
+    return true;
+  }
+
+  function syncOrders() {
+    for (let i = 0; i < state.lists.length; i++) {
+      const list = state.lists[i];
+      list.order = i + 1;
+      syncItemOrders(list.items);
+    }
+  }
+
+  function syncItemOrders(items) {
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      it.order = i + 1;
+      if (it.children && it.children.length) syncItemOrders(it.children);
+    }
+  }
+
+  function deleteItemById(list, itemId) {
+    const idx = list.items.findIndex(x => x.id === itemId);
+    if (idx >= 0) { list.items.splice(idx, 1); return true; }
+    return deleteItemInChildren(list.items, itemId);
+  }
+
+  function deleteItemInChildren(items, itemId) {
+    for (const it of items) {
+      const idx = it.children.findIndex(x => x.id === itemId);
+      if (idx >= 0) { it.children.splice(idx, 1); return true; }
+      if (deleteItemInChildren(it.children, itemId)) return true;
+    }
+    return false;
+  }
+
+  function setAllDesc(item, val) {
+    item.done = !!val;
+    for (const ch of item.children) setAllDesc(ch, val);
+  }
+
+  // Completion rule:
+  // - Leaf: done is user checkbox
+  // - Parent: "fully done" if (done === true) OR (children exist AND ALL descendants fully done)
+  function isFullyDone(item) {
+    if (item.done) return true;
+    if (!item.children || item.children.length === 0) return false;
+    return item.children.every(isFullyDone);
+  }
+
+  function anyDoneOrPartial(item) {
+    if (isFullyDone(item)) return true;
+    if (item.children && item.children.length) return item.children.some(anyDoneOrPartial);
+    return false;
+  }
+
+  function getTriState(item) {
+    const hasKids = item.children && item.children.length > 0;
+
+    if (!hasKids) {
+      return { checked: !!item.done, indeterminate: false, strike: !!item.done };
+    }
+
+    const all = item.children.every(isFullyDone);
+    const any = item.children.some(anyDoneOrPartial);
+
+    const checked = !!item.done || all;
+    const indeterminate = !checked && any;
+    const strike = checked; // çizgi: done veya tüm altlar bitince (checked true)
+    return { checked, indeterminate, strike };
+  }
+
+  function render() {
+    $lists.innerHTML = "";
+
+    syncOrders();
+
+    const single = window.matchMedia("(max-width: 980px)").matches;
+
+    if (!state.lists.length) {
+      // Empty state: tek kolon (tam genişlik) daha temiz
+      $lists.className = "lists one-col";
+
+      const box = document.createElement("div");
+      box.className = "list-card";
+      box.innerHTML = `
+        <div class="list-head">
+          <div class="list-title">
+            <input class="title-input" value="Henüz liste yok" disabled />
+          </div>
+          <div class="list-tools">
+            <span class="pill">İpucu: “+ Yeni Liste”</span>
+          </div>
+        </div>
+        <div class="list-body">
+          <div class="empty">Bir liste oluşturup görev ekleyebilirsin. Alt görev için her maddede “Alt görev +” kullan.</div>
+        </div>
+      `;
+      $lists.appendChild(box);
+      updateMeta();
+      return;
+    }
+
+    // Desktop (>= 981px): iki bağımsız kolon (1-3-5... / 2-4-6...) => boşluk oluşmaz
+    // Mobile (<= 980px): tek kolon ve kaynak sırası korunur
+    $lists.className = `lists ${single ? "one-col" : "two-col"}`;
+
+    let colA = null;
+    let colB = null;
+
+    if (!single) {
+      colA = document.createElement("div");
+      colA.className = "lists-col";
+      colB = document.createElement("div");
+      colB.className = "lists-col";
+      $lists.appendChild(colA);
+      $lists.appendChild(colB);
+    }
+
+    for (let listIdx = 0; listIdx < state.lists.length; listIdx++) {
+      const list = state.lists[listIdx];
+      const card = document.createElement("div");
+      card.className = "list-card";
+
+      const itemCount = countItems(list.items);
+      const doneCount = countDoneItems(list.items);
+
+      card.innerHTML = `
+        <div class="list-head">
+          <div class="list-title">
+            <div class="order-wrap" title="Liste sırası">
+              <span class="order-tag">#</span>
+              <input class="order-input"
+                     type="number"
+                     min="1"
+                     step="1"
+                     inputmode="numeric"
+                     data-role="listOrder"
+                     data-list-id="${esc(list.id)}"
+                     value="${escAttr(String(list.order || (listIdx + 1)))}" />
+            </div>
+            <input class="title-input" data-role="listTitle" data-list-id="${esc(list.id)}" value="${escAttr(list.title)}" />
+          </div>
+          <div class="list-tools">
+            <span class="pill">${doneCount}/${itemCount} tamam</span>
+            <button class="mini del" data-action="deleteList" data-list-id="${esc(list.id)}">Listeyi Sil</button>
+          </div>
+        </div>
+
+        <div class="list-add">
+          <input class="add-input" placeholder="Yeni madde yaz ve Enter…" data-role="addRoot" data-list-id="${esc(list.id)}" />
+          <button class="primary" data-action="addRootItem" data-list-id="${esc(list.id)}">Ekle</button>
+        </div>
+
+        <div class="list-body">
+          ${renderItems(list, list.items, list.layout, true)}
+        </div>
+      `;
+
+      const mount = single ? $lists : ((listIdx % 2 === 0) ? colA : colB);
+      mount.appendChild(card);
+    }
+
+    applyTriStates();
+    focusPending();
+    updateMeta();
+  }
+
+  function renderItems(list, items, layout, isRoot) {
+    if (!items || items.length === 0) {
+      return `<div class="empty">${isRoot ? "Henüz madde yok." : "Alt görev yok."}</div>`;
+    }
+
+    const cls = isRoot ? "items" : "children";
+    const ulClass = `${cls} ${layout}`;
+
+    const liHtml = items.map((it, idx) => renderItem(list, it, layout, idx)).join("");
+    return `<ul class="${ulClass}">${liHtml}</ul>`;
+  }
+
+  function renderItem(list, item, layout, idx) {
+    const st = getTriState(item);
+    const textCls = st.strike ? "text done" : "text";
+
+    const hasChildren = item.children && item.children.length > 0;
+
+    return `
+      <li class="item" data-item-wrap="${esc(item.id)}">
+        <div class="item-row">
+          <input class="order-input item-order"
+                 type="number"
+                 min="1"
+                 step="1"
+                 inputmode="numeric"
+                 data-role="itemOrder"
+                 data-list-id="${esc(list.id)}"
+                 data-item-id="${esc(item.id)}"
+                 value="${escAttr(String(item.order || (idx + 1)))}" />
+          <input class="ck"
+                 type="checkbox"
+                 data-role="itemCk"
+                 data-list-id="${esc(list.id)}"
+                 data-item-id="${esc(item.id)}"
+                 ${st.checked ? "checked" : ""} />
+          <input class="${textCls}"
+                 type="text"
+                 value="${escAttr(item.text)}"
+                 placeholder="${hasChildren ? "Üst madde (altlar tamamlanınca otomatik çizilir)" : "Görev…"}"
+                 data-role="itemText"
+                 data-list-id="${esc(list.id)}"
+                 data-item-id="${esc(item.id)}" />
+        </div>
+
+        <div class="item-actions">
+          <button class="mini ok" data-action="addChild" data-list-id="${esc(list.id)}" data-item-id="${esc(item.id)}">Alt görev +</button>
+          <button class="mini del" data-action="deleteItem" data-list-id="${esc(list.id)}" data-item-id="${esc(item.id)}">Sil</button>
+        </div>
+
+        ${renderItems(list, item.children, layout, false)}
+      </li>
+    `;
+  }
+
+  function applyTriStates() {
+    const cks = $lists.querySelectorAll('input[type="checkbox"][data-role="itemCk"]');
+    for (const ck of cks) {
+      const listId = ck.dataset.listId;
+      const itemId = ck.dataset.itemId;
+      const list = findList(listId);
+      if (!list) continue;
+      const found = findItem(list.items, itemId);
+      if (!found) continue;
+
+      const st = getTriState(found.item);
+      ck.indeterminate = !!st.indeterminate;
+      ck.checked = !!st.checked;
+    }
+  }
+
+  function focusPending() {
+    if (!pendingFocus.listId) return;
+
+    if (pendingFocus.itemId) {
+      const inp = $lists.querySelector(`input[data-role="itemText"][data-list-id="${cssEsc(pendingFocus.listId)}"][data-item-id="${cssEsc(pendingFocus.itemId)}"]`);
+      if (inp) {
+        inp.focus();
+        inp.select();
+      }
+    } else {
+      const title = $lists.querySelector(`input[data-role="listTitle"][data-list-id="${cssEsc(pendingFocus.listId)}"]`);
+      if (title) {
+        title.focus();
+        title.select();
+      }
+    }
+
+    pendingFocus = { listId: null, itemId: null };
+  }
+
+  function countItems(items) {
+    let n = 0;
+    for (const it of items) {
+      n++;
+      if (it.children && it.children.length) n += countItems(it.children);
+    }
+    return n;
+  }
+
+  function countDoneItems(items) {
+    let n = 0;
+    for (const it of items) {
+      if (isFullyDone(it)) n++;
+      if (it.children && it.children.length) n += countDoneItems(it.children);
+    }
+    return n;
+  }
+
+  function validateAndMigrate(obj) {
+    if (!obj || typeof obj !== "object") throw new Error("Invalid state");
+    const ver = Number(obj.version || 1);
+
+    const nextTheme = (obj.theme === "dark") ? "dark" : "light";
+
+    const next = {
+      version: VERSION,
+      updatedAt: Number(obj.updatedAt || Date.now()),
+      theme: nextTheme,
+      lists: Array.isArray(obj.lists) ? sortByOrder(obj.lists.map((x, i) => normalizeList(x, i + 1))) : []
+    };
+
+    if (ver > VERSION) {
+      // forward-compat: accept but normalize
+    }
+    return next;
+  }
+
+  function normalizeList(l, fallbackOrder) {
+    const id = (l && typeof l.id === "string") ? l.id : makeId();
+    const title = (l && typeof l.title === "string") ? l.title : "Liste";
+    const layout = "vertical";
+
+    const orderNum = (l && Number.isFinite(Number(l.order))) ? Math.trunc(Number(l.order)) : Number(fallbackOrder || 0);
+    const order = (orderNum > 0) ? orderNum : 0;
+
+    let items = (l && Array.isArray(l.items)) ? l.items.map((x, i) => normalizeItem(x, i + 1)) : [];
+    items = sortByOrder(items);
+
+    return { id, order, title, layout, items };
+  }
+
+  function normalizeItem(it, fallbackOrder) {
+    const id = (it && typeof it.id === "string") ? it.id : makeId();
+    const text = (it && typeof it.text === "string") ? it.text : "";
+    const done = !!(it && it.done);
+
+    const orderNum = (it && Number.isFinite(Number(it.order))) ? Math.trunc(Number(it.order)) : Number(fallbackOrder || 0);
+    const order = (orderNum > 0) ? orderNum : 0;
+
+    let children = (it && Array.isArray(it.children)) ? it.children.map((x, i) => normalizeItem(x, i + 1)) : [];
+    children = sortByOrder(children);
+
+    return { id, order, text, done, children };
+  }
+
+  function sortByOrder(arr) {
+    return arr
+      .map((x, i) => ({ x, i }))
+      .sort((a, b) => {
+        const ao = Number(a.x.order || 0);
+        const bo = Number(b.x.order || 0);
+        if (ao !== bo) return ao - bo;
+        return a.i - b.i;
+      })
+      .map(o => o.x);
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, (c) => (
+      c === "&" ? "&amp;" :
+      c === "<" ? "&lt;" :
+      c === ">" ? "&gt;" :
+      c === '"' ? "&quot;" : "&#39;"
+    ));
+  }
+  function escAttr(s) { return esc(s); }
+  function cssEsc(s) { return String(s).replace(/"/g, '\\"'); }
+
+  // Init
+  loadFromStorage();
+
+  // Default open/light if storage empty or invalid
+  if (state.theme !== "dark") state.theme = "light";
+
+  applyTheme();
+
+  if (!state.lists.length) {
+    state.lists.push(makeList("Genel"));
+    touch();
+  } else {
+    // Persist order fields into Local Storage (without changing updatedAt)
+    saveToStorage();
+    updateMeta();
+  }
+  render();
+
+  // 2-kolon / 1-kolon eşik geçişinde (<=980px) DOM'u yeniden kur: sıralama bozulmasın
+  const layoutMQ = window.matchMedia("(max-width: 980px)");
+  try { layoutMQ.addEventListener("change", () => render()); }
+  catch { layoutMQ.addListener(() => render()); }
+
+  window.addEventListener("beforeunload", () => {
+    try { saveToStorage(); } catch {}
+  });
+
+})();
+</script>
+</body>
+</html>
