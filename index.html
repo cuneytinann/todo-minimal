@@ -42,7 +42,7 @@
       font-size: 1rem; /* base: 1rem = 1rem */
     }
     /* Limited scaling: don't chase ultra-small viewports */
-    @media (max-width: 980px){
+    @media (max-width: 768px){
       html{ font-size: 0.9375rem; }
     }
     @media (max-width: 600px){
@@ -209,10 +209,15 @@ html, body{ height: 100%; }
       box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,.18);
     }
 
-    @media (max-width: 980px){
+    @media (max-width: 768px){
       /* Mobile: JS yeniden render ederek tek kolona döner.
          (Bu kural sadece emniyet supabı olarak dursun.) */
       .lists.two-col{ flex-direction: column; }
+
+      /* Başlık satırı mobilde sıkışmasın: araçları alt satıra indir */
+      .list-head{ flex-wrap: wrap; align-items: flex-start; }
+      .list-title{ flex: 1 1 100%; }
+      .list-tools{ flex: 1 1 100%; justify-content: space-between; }
     }
 
     .list-head{
@@ -405,11 +410,11 @@ html, body{ height: 100%; }
     .item-row{
       display: flex;
       gap: 0.625rem;
-      align-items: flex-start;
+      align-items: center;
     }
 
     .ck{
-      margin-top: 2px;
+      margin-top: 0;
       width: 1.125rem;
       height: 1.125rem;
       accent-color: var(--accent);
@@ -439,6 +444,20 @@ html, body{ height: 100%; }
     html[data-theme="dark"] .text:focus{
       border-color: rgba(90,169,255,.65);
       box-shadow: 0 0 0 3px rgba(90,169,255,.10);
+    }
+
+    /* Text wrap + autosize (liste başlığı + madde metni) */
+    .title-input, .text{
+      font-family: inherit;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      hyphens: auto;
+    }
+    textarea.title-input, textarea.text{
+      resize: none;
+      overflow: hidden;
+      height: auto;
     }
 
     .text.done{
@@ -627,13 +646,26 @@ html, body{ height: 100%; }
     try {
       const text = await file.text();
       const obj = JSON.parse(text);
-      const migrated = validateAndMigrate(obj);
-      state = migrated;
-      applyTheme();
+      const incoming = validateAndMigrate(obj);
+
+      // Merge import: gelen yedek, mevcut kaydın ÜSTÜNE yazılır (var olan listeler korunur).
+      // Aynı id'li liste gelirse güncellenir; yeni listeler sona eklenir.
+      const indexById = new Map(state.lists.map((l, i) => [l.id, i]));
+      for (const list of incoming.lists) {
+        const idx = indexById.get(list.id);
+        if (idx === undefined) {
+          indexById.set(list.id, state.lists.length);
+          state.lists.push(list);
+        } else {
+          state.lists[idx] = list;
+        }
+      }
+
+      state.updatedAt = Date.now();
       touch();
       render();
-      toast("OK", "Yedek dosyası yüklendi ve uygulandı.");
-    } catch (err) {
+      toast("OK", "Yedek dosyası mevcut kaydın üstüne yazıldı.");
+} catch (err) {
       console.error(err);
       toast("HATA", "Yükleme başarısız: Geçersiz JSON veya beklenmeyen format.");
     }
@@ -742,7 +774,7 @@ html, body{ height: 100%; }
   // - Out-of-range => MOVE to start/end
   $lists.addEventListener("change", (e) => {
     const el = e.target;
-    if (!(el instanceof HTMLInputElement)) return;
+    if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) return;
 
     if (el.dataset.role === "listOrder") {
       const listId = el.dataset.listId;
@@ -777,7 +809,7 @@ html, body{ height: 100%; }
   // Event delegation: list title edit + item text edit
   $lists.addEventListener("input", (e) => {
     const el = e.target;
-    if (!(el instanceof HTMLInputElement)) return;
+    if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) return;
 
     if (el.dataset.role === "listTitle") {
       const listId = el.dataset.listId;
@@ -785,6 +817,7 @@ html, body{ height: 100%; }
       if (!list) return;
       list.title = el.value;
       touch(false);
+      if (el instanceof HTMLTextAreaElement) autosizeTextarea(el);
       return;
     }
 
@@ -797,6 +830,7 @@ html, body{ height: 100%; }
       if (!found) return;
       found.item.text = el.value;
       touch(false);
+      if (el instanceof HTMLTextAreaElement) autosizeTextarea(el);
       return;
     }
   });
@@ -809,6 +843,11 @@ html, body{ height: 100%; }
     if (e.key === "Enter" && (el.dataset.role === "listOrder" || el.dataset.role === "itemOrder")) {
       e.preventDefault();
       el.blur();
+      return;
+    }
+
+    if (e.key === "Enter" && (el.dataset.role === "listTitle" || el.dataset.role === "itemText")) {
+      e.preventDefault();
       return;
     }
 
@@ -1040,12 +1079,24 @@ html, body{ height: 100%; }
     return { checked, indeterminate, strike };
   }
 
+
+  function autosizeTextarea(el) {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }
+
+  function autosizeAll() {
+    const els = $lists.querySelectorAll("textarea.autosize");
+    for (const el of els) autosizeTextarea(el);
+  }
+
   function render() {
     $lists.innerHTML = "";
 
     syncOrders();
 
-    const single = window.matchMedia("(max-width: 980px)").matches;
+    const single = window.matchMedia("(max-width: 768px)").matches;
 
     if (!state.lists.length) {
       // Empty state: tek kolon (tam genişlik) daha temiz
@@ -1056,7 +1107,7 @@ html, body{ height: 100%; }
       box.innerHTML = `
         <div class="list-head">
           <div class="list-title">
-            <input class="title-input" value="Henüz liste yok" disabled />
+            <textarea class="title-input autosize" rows="1" disabled>Henüz liste yok</textarea>
           </div>
           <div class="list-tools">
             <span class="pill">İpucu: “+ Yeni Liste”</span>
@@ -1071,8 +1122,8 @@ html, body{ height: 100%; }
       return;
     }
 
-    // Desktop (>= 981px): iki bağımsız kolon (1-3-5... / 2-4-6...) => boşluk oluşmaz
-    // Mobile (<= 980px): tek kolon ve kaynak sırası korunur
+    // Desktop (>= 769px): iki bağımsız kolon (1-3-5... / 2-4-6...) => boşluk oluşmaz
+    // Mobile (<= 768px): tek kolon ve kaynak sırası korunur
     $lists.className = `lists ${single ? "one-col" : "two-col"}`;
 
     let colA = null;
@@ -1109,7 +1160,7 @@ html, body{ height: 100%; }
                      data-list-id="${esc(list.id)}"
                      value="${escAttr(String(list.order || (listIdx + 1)))}" />
             </div>
-            <input class="title-input" data-role="listTitle" data-list-id="${esc(list.id)}" value="${escAttr(list.title)}" />
+            <textarea class="title-input autosize" rows="1" data-role="listTitle" data-list-id="${esc(list.id)}">${esc(list.title)}</textarea>
           </div>
           <div class="list-tools">
             <span class="pill">${doneCount}/${itemCount} tamam</span>
@@ -1132,6 +1183,7 @@ html, body{ height: 100%; }
     }
 
     applyTriStates();
+    autosizeAll();
     focusPending();
     updateMeta();
   }
@@ -1172,13 +1224,7 @@ html, body{ height: 100%; }
                  data-list-id="${esc(list.id)}"
                  data-item-id="${esc(item.id)}"
                  ${st.checked ? "checked" : ""} />
-          <input class="${textCls}"
-                 type="text"
-                 value="${escAttr(item.text)}"
-                 placeholder="${hasChildren ? "Üst madde (altlar tamamlanınca otomatik çizilir)" : "Görev…"}"
-                 data-role="itemText"
-                 data-list-id="${esc(list.id)}"
-                 data-item-id="${esc(item.id)}" />
+          <textarea class="${textCls} autosize" rows="1" placeholder="${hasChildren ? "Üst madde (altlar tamamlanınca otomatik çizilir)" : "Görev…"}" data-role="itemText" data-list-id="${esc(list.id)}" data-item-id="${esc(item.id)}">${esc(item.text)}</textarea>
         </div>
 
         <div class="item-actions">
@@ -1211,13 +1257,13 @@ html, body{ height: 100%; }
     if (!pendingFocus.listId) return;
 
     if (pendingFocus.itemId) {
-      const inp = $lists.querySelector(`input[data-role="itemText"][data-list-id="${cssEsc(pendingFocus.listId)}"][data-item-id="${cssEsc(pendingFocus.itemId)}"]`);
+      const inp = $lists.querySelector(`[data-role="itemText"][data-list-id="${cssEsc(pendingFocus.listId)}"][data-item-id="${cssEsc(pendingFocus.itemId)}"]`);
       if (inp) {
         inp.focus();
         inp.select();
       }
     } else {
-      const title = $lists.querySelector(`input[data-role="listTitle"][data-list-id="${cssEsc(pendingFocus.listId)}"]`);
+      const title = $lists.querySelector(`[data-role="listTitle"][data-list-id="${cssEsc(pendingFocus.listId)}"]`);
       if (title) {
         title.focus();
         title.select();
@@ -1333,8 +1379,8 @@ html, body{ height: 100%; }
   }
   render();
 
-  // 2-kolon / 1-kolon eşik geçişinde (<=980px) DOM'u yeniden kur: sıralama bozulmasın
-  const layoutMQ = window.matchMedia("(max-width: 980px)");
+  // 2-kolon / 1-kolon eşik geçişinde (<=768px) DOM'u yeniden kur: sıralama bozulmasın
+  const layoutMQ = window.matchMedia("(max-width: 768px)");
   try { layoutMQ.addEventListener("change", () => render()); }
   catch { layoutMQ.addListener(() => render()); }
 
