@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="tr" data-theme="light">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Nested To-Do (Tek Dosya)</title>
   <style>
-    :root{
+    :root {
       /* LIGHT (default) */
       --bg: #ffffff;
       --bg2: #f4f6f8;
@@ -23,7 +24,7 @@
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
     }
 
-    html[data-theme="dark"]{
+    html[data-theme="dark"] {
       --bg: #0b0f14;
       --bg2: #0b0f14;
       --panel: #111822;
@@ -36,34 +37,47 @@
       --ok: #3ddc97;
     }
 
-    *{ box-sizing: border-box; }
-    
-    html{
-      font-size: 1rem; /* base: 1rem = 1rem */
-    }
-    /* Limited scaling: don't chase ultra-small viewports */
-    @media (max-width: 768px){
-      html{ font-size: 0.9375rem; }
-    }
-    @media (max-width: 600px){
-      html{ font-size: 0.875rem; }
+    * {
+      box-sizing: border-box;
     }
 
-html, body{ height: 100%; }
-    body{
+    html {
+      font-size: 1rem;
+      /* base: 1rem = 1rem */
+    }
+
+    /* Limited scaling: don't chase ultra-small viewports */
+    @media (max-width: 768px) {
+      html {
+        font-size: 0.9375rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      html {
+        font-size: 0.875rem;
+      }
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
       margin: 0;
       font-family: var(--sans);
       background: radial-gradient(75rem 50rem at 20% 10%, var(--bg2) 0%, var(--bg) 55%);
       color: var(--text);
     }
 
-    .app{
+    .app {
       max-width: 75rem;
       margin: 0 auto;
       padding: 1.125rem;
     }
 
-    .topbar{
+    .topbar {
       display: flex;
       gap: 0.75rem;
       flex-wrap: wrap;
@@ -71,34 +85,36 @@ html, body{ height: 100%; }
       justify-content: space-between;
       padding: 0.875rem;
       border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.7));
+      background: linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(255, 255, 255, .7));
       border-radius: var(--r);
-      box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,.10);
+      box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, .10);
     }
 
-    html[data-theme="dark"] .topbar{
-      background: linear-gradient(180deg, rgba(17,24,34,.9), rgba(15,22,32,.85));
-      box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,.25);
+    html[data-theme="dark"] .topbar {
+      background: linear-gradient(180deg, rgba(17, 24, 34, .9), rgba(15, 22, 32, .85));
+      box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, .25);
     }
 
-    .brand{
+    .brand {
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
       min-width: 13.75rem;
     }
-    .brand .title{
+
+    .brand .title {
       font-size: 1rem;
       font-weight: 800;
       letter-spacing: .2px;
     }
-    .brand .sub{
+
+    .brand .sub {
       font-size: 0.75rem;
       color: var(--muted);
       line-height: 1.2;
     }
 
-    .actions{
+    .actions {
       display: flex;
       gap: 0.625rem;
       flex-wrap: wrap;
@@ -106,7 +122,8 @@ html, body{ height: 100%; }
       justify-content: flex-end;
     }
 
-    button, .btn{
+    button,
+    .btn {
       border: 1px solid var(--border);
       background: #ffffff;
       color: var(--text);
@@ -119,74 +136,88 @@ html, body{ height: 100%; }
       transition: transform .05s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;
       user-select: none;
     }
+
     html[data-theme="dark"] button,
-    html[data-theme="dark"] .btn{
+    html[data-theme="dark"] .btn {
       background: #0f1723;
     }
-    button:hover{
-      border-color: rgba(11,99,255,.55);
-      box-shadow: 0 0 0 3px rgba(11,99,255,.10);
-    }
-    html[data-theme="dark"] button:hover{
-      border-color: rgba(90,169,255,.6);
-      box-shadow: 0 0 0 3px rgba(90,169,255,.15);
-    }
-    button:active{ transform: translateY(1px); }
 
-    button.primary{
-      border-color: rgba(11,99,255,.45);
-      background: rgba(11,99,255,.08);
-    }
-    html[data-theme="dark"] button.primary{
-      border-color: rgba(90,169,255,.55);
-      background: rgba(90,169,255,.12);
+    button:hover {
+      border-color: rgba(11, 99, 255, .55);
+      box-shadow: 0 0 0 3px rgba(11, 99, 255, .10);
     }
 
-    button.danger{
-      border-color: rgba(217,44,74,.45);
-      background: rgba(217,44,74,.08);
-    }
-    html[data-theme="dark"] button.danger{
-      border-color: rgba(255,90,122,.55);
-      background: rgba(255,90,122,.12);
+    html[data-theme="dark"] button:hover {
+      border-color: rgba(90, 169, 255, .6);
+      box-shadow: 0 0 0 3px rgba(90, 169, 255, .15);
     }
 
-    button.ghost{
+    button:active {
+      transform: translateY(1px);
+    }
+
+    button.primary {
+      border-color: rgba(11, 99, 255, .45);
+      background: rgba(11, 99, 255, .08);
+    }
+
+    html[data-theme="dark"] button.primary {
+      border-color: rgba(90, 169, 255, .55);
+      background: rgba(90, 169, 255, .12);
+    }
+
+    button.danger {
+      border-color: rgba(217, 44, 74, .45);
+      background: rgba(217, 44, 74, .08);
+    }
+
+    html[data-theme="dark"] button.danger {
+      border-color: rgba(255, 90, 122, .55);
+      background: rgba(255, 90, 122, .12);
+    }
+
+    button.ghost {
       background: transparent;
     }
 
-    input[type="file"]{ display: none; }
-    .filelabel{
+    input[type="file"] {
+      display: none;
+    }
+
+    .filelabel {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .meta{
+    .meta {
       font-family: var(--mono);
       font-size: 0.75rem;
       color: var(--muted);
       padding: 0.375rem 0.625rem;
-      border: 1px dashed rgba(214,221,230,.95);
+      border: 1px dashed rgba(214, 221, 230, .95);
       border-radius: 0.625rem;
-      background: rgba(0,0,0,.02);
-    }
-    html[data-theme="dark"] .meta{
-      border-color: rgba(34,48,68,.9);
-      background: rgba(0,0,0,.12);
+      background: rgba(0, 0, 0, .02);
     }
 
-    .lists{
+    html[data-theme="dark"] .meta {
+      border-color: rgba(34, 48, 68, .9);
+      background: rgba(0, 0, 0, .12);
+    }
+
+    .lists {
       margin-top: 0.875rem;
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
     }
-    .lists.two-col{
+
+    .lists.two-col {
       flex-direction: row;
       align-items: flex-start;
     }
-    .lists-col{
+
+    .lists-col {
       flex: 1 1 0;
       min-width: 0;
       display: flex;
@@ -194,12 +225,12 @@ html, body{ height: 100%; }
       gap: 0.75rem;
     }
 
-    .list-card{
+    .list-card {
       width: 100%;
       border: 1px solid var(--border);
-      background: var(--list-bg, linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.80)));
+      background: var(--list-bg, linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(255, 255, 255, .80)));
       border-radius: var(--r);
-      box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,.08);
+      box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, .08);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -207,50 +238,69 @@ html, body{ height: 100%; }
     }
 
     /* Subtle sheen so flat colors still look like "cards" */
-    .list-card::before{
+    .list-card::before {
       content: "";
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background: linear-gradient(180deg, rgba(255,255,255,.40), rgba(255,255,255,.12));
+      background: linear-gradient(180deg, rgba(255, 255, 255, .40), rgba(255, 255, 255, .12));
       mix-blend-mode: soft-light;
     }
-    html[data-theme="dark"] .list-card::before{
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.22));
+
+    html[data-theme="dark"] .list-card::before {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(0, 0, 0, .22));
       mix-blend-mode: normal;
       opacity: .9;
     }
-    .list-card > *{ position: relative; }
-    html[data-theme="dark"] .list-card{
-      background: var(--list-bg, linear-gradient(180deg, rgba(17,24,34,.9), rgba(15,22,32,.82)));
-      box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,.18);
+
+    .list-card>* {
+      position: relative;
     }
 
-    @media (max-width: 768px){
+    html[data-theme="dark"] .list-card {
+      background: var(--list-bg, linear-gradient(180deg, rgba(17, 24, 34, .9), rgba(15, 22, 32, .82)));
+      box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, .18);
+    }
+
+    @media (max-width: 768px) {
+
       /* Mobile: JS yeniden render ederek tek kolona döner.
          (Bu kural sadece emniyet supabı olarak dursun.) */
-      .lists.two-col{ flex-direction: column; }
+      .lists.two-col {
+        flex-direction: column;
+      }
 
       /* Başlık satırı mobilde sıkışmasın: araçları alt satıra indir */
-      .list-head{ flex-wrap: wrap; align-items: flex-start; }
-      .list-title{ flex: 1 1 100%; }
-      .list-tools{ flex: 1 1 100%; justify-content: space-between; }
+      .list-head {
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+
+      .list-title {
+        flex: 1 1 100%;
+      }
+
+      .list-tools {
+        flex: 1 1 100%;
+        justify-content: space-between;
+      }
     }
 
-    .list-head{
+    .list-head {
       position: relative;
-            display: flex;
+      display: flex;
       gap: 0.625rem;
       align-items: center;
       justify-content: space-between;
       padding: 0.75rem 0.75rem 0.625rem 0.75rem;
-      border-bottom: 1px solid rgba(214,221,230,.9);
-    }
-    html[data-theme="dark"] .list-head{
-      border-bottom-color: rgba(34,48,68,.8);
+      border-bottom: 1px solid rgba(214, 221, 230, .9);
     }
 
-    .list-title{
+    html[data-theme="dark"] .list-head {
+      border-bottom-color: rgba(34, 48, 68, .8);
+    }
+
+    .list-title {
       display: flex;
       gap: 0.625rem;
       align-items: center;
@@ -258,11 +308,11 @@ html, body{ height: 100%; }
       min-width: 0;
     }
 
-    .title-input{
+    .title-input {
       width: 100%;
       min-width: 7.5rem;
-      border: 1px solid rgba(214,221,230,.95);
-      background: rgba(0,0,0,.02);
+      border: 1px solid rgba(214, 221, 230, .95);
+      background: rgba(0, 0, 0, .02);
       color: var(--text);
       padding: 0.5rem 0.625rem;
       border-radius: 0.625rem;
@@ -270,44 +320,50 @@ html, body{ height: 100%; }
       font-size: 0.875rem;
       outline: none;
     }
-    html[data-theme="dark"] .title-input{
-      border-color: rgba(34,48,68,.9);
-      background: rgba(0,0,0,.12);
+
+    html[data-theme="dark"] .title-input {
+      border-color: rgba(34, 48, 68, .9);
+      background: rgba(0, 0, 0, .12);
     }
-    .title-input:focus{
-      border-color: rgba(11,99,255,.65);
-      box-shadow: 0 0 0 3px rgba(11,99,255,.12);
+
+    .title-input:focus {
+      border-color: rgba(11, 99, 255, .65);
+      box-shadow: 0 0 0 3px rgba(11, 99, 255, .12);
     }
-    html[data-theme="dark"] .title-input:focus{
-      border-color: rgba(90,169,255,.7);
-      box-shadow: 0 0 0 3px rgba(90,169,255,.15);
+
+    html[data-theme="dark"] .title-input:focus {
+      border-color: rgba(90, 169, 255, .7);
+      box-shadow: 0 0 0 3px rgba(90, 169, 255, .15);
     }
 
     /* Order controls (lists + items) */
-    .order-wrap{
+    .order-wrap {
       display: inline-flex;
       align-items: center;
       gap: 0.375rem;
       padding: 0.375rem 0.5rem;
-      border: 1px solid rgba(214,221,230,.95);
-      background: rgba(0,0,0,.02);
+      border: 1px solid rgba(214, 221, 230, .95);
+      background: rgba(0, 0, 0, .02);
       border-radius: 0.625rem;
       flex: 0 0 auto;
       user-select: none;
     }
-    html[data-theme="dark"] .order-wrap{
-      border-color: rgba(34,48,68,.9);
-      background: rgba(0,0,0,.12);
+
+    html[data-theme="dark"] .order-wrap {
+      border-color: rgba(34, 48, 68, .9);
+      background: rgba(0, 0, 0, .12);
     }
-    .order-tag{
+
+    .order-tag {
       font-family: var(--mono);
       font-size: 0.75rem;
       color: var(--muted);
       line-height: 1;
     }
-    .order-input{
+
+    .order-input {
       width: 4rem;
-      border: 1px solid rgba(214,221,230,.95);
+      border: 1px solid rgba(214, 221, 230, .95);
       background: #ffffff;
       color: var(--text);
       padding: 0.375rem 0.375rem;
@@ -317,55 +373,67 @@ html, body{ height: 100%; }
       text-align: center;
       outline: none;
     }
-    html[data-theme="dark"] .order-input{
+
+    html[data-theme="dark"] .order-input {
       background: #0f1723;
-      border-color: rgba(34,48,68,.85);
+      border-color: rgba(34, 48, 68, .85);
     }
-    .order-input:focus{
-      border-color: rgba(11,99,255,.65);
-      box-shadow: 0 0 0 3px rgba(11,99,255,.10);
+
+    .order-input:focus {
+      border-color: rgba(11, 99, 255, .65);
+      box-shadow: 0 0 0 3px rgba(11, 99, 255, .10);
     }
-    html[data-theme="dark"] .order-input:focus{
-      border-color: rgba(90,169,255,.7);
-      box-shadow: 0 0 0 3px rgba(90,169,255,.12);
+
+    html[data-theme="dark"] .order-input:focus {
+      border-color: rgba(90, 169, 255, .7);
+      box-shadow: 0 0 0 3px rgba(90, 169, 255, .12);
     }
-    .order-input.item-order{ width: 3.5rem; }
+
+    .order-input.item-order {
+      width: 3.5rem;
+    }
 
     /* Mobile-friendly custom spin buttons (overlay).
        Native spinners are inconsistent across mobile browsers. */
     input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button{
+    input[type="number"]::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
-    input[type="number"]{ -moz-appearance: textfield; }
 
-    .num{
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .num {
       position: relative;
       display: inline-block;
       flex: 0 0 auto;
     }
-    .num > input[type="number"]{
-      padding-right: 1.5rem; /* room for overlay */
+
+    .num>input[type="number"] {
+      padding-right: 1.5rem;
+      /* room for overlay */
     }
 
-    .num-spin{
+    .num-spin {
       position: absolute;
-      top: 0.1875rem;
       right: 0.1875rem;
       bottom: 0.1875rem;
       width: 1.3125rem;
       display: flex;
       flex-direction: column;
       gap: 0.125rem;
-      pointer-events: none; /* buttons re-enable */
+      pointer-events: none;
+      /* buttons re-enable */
     }
-    .spin-btn{
+
+    .spin-btn {
       pointer-events: auto;
       flex: 1 1 0;
       padding: 0;
-      border: 1px solid rgba(214,221,230,.95);
-      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(214, 221, 230, .95);
+      background: rgba(255, 255, 255, .92);
       color: var(--muted);
       font-weight: 900;
       font-size: 0.625rem;
@@ -379,25 +447,29 @@ html, body{ height: 100%; }
       box-shadow: none;
       transform: none;
     }
-    html[data-theme="dark"] .spin-btn{
-      border-color: rgba(34,48,68,.85);
-      background: rgba(15,23,35,.92);
+
+    html[data-theme="dark"] .spin-btn {
+      border-color: rgba(34, 48, 68, .85);
+      background: rgba(15, 23, 35, .92);
       color: var(--muted);
     }
-    .spin-btn:active{ transform: none; }
 
-    .list-tools{
+    .spin-btn:active {
+      transform: none;
+    }
+
+    .list-tools {
       display: flex;
       gap: 0.5rem;
       align-items: center;
       flex-wrap: wrap;
       justify-content: flex-end;
-          padding-right: 1.75rem;
+      padding-right: 1.75rem;
     }
 
-    
+
     /* List color control (top-right, layout-safe) */
-    .list-color{
+    .list-color {
       position: absolute;
       top: 0.625rem;
       right: 0.625rem;
@@ -407,92 +479,112 @@ html, body{ height: 100%; }
       align-items: center;
       justify-content: center;
     }
-    .list-color .color-input{
+
+    .list-color .color-input {
       width: 1.25rem;
       height: 1.25rem;
       padding: 0;
-      border: 1px solid rgba(0,0,0,.10);
+      border: 1px solid rgba(0, 0, 0, .10);
       border-radius: 0.5rem;
       background: transparent;
       cursor: pointer;
-      box-shadow: 0 0.375rem 1rem rgba(0,0,0,.10);
+      box-shadow: 0 0.375rem 1rem rgba(0, 0, 0, .10);
     }
-    html[data-theme="dark"] .list-color .color-input{
-      border-color: rgba(255,255,255,.14);
-      box-shadow: 0 0.375rem 1rem rgba(0,0,0,.35);
+
+    html[data-theme="dark"] .list-color .color-input {
+      border-color: rgba(255, 255, 255, .14);
+      box-shadow: 0 0.375rem 1rem rgba(0, 0, 0, .35);
     }
+
     /* Remove default inner padding in some browsers */
-    .list-color .color-input::-webkit-color-swatch-wrapper{ padding: 0; }
-    .list-color .color-input::-webkit-color-swatch{
+    .list-color .color-input::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    .list-color .color-input::-webkit-color-swatch {
       border: none;
       border-radius: 0.45rem;
     }
-.pill{
+
+    .pill {
       font-family: var(--mono);
       font-size: 0.6875rem;
       padding: 0.375rem 0.5rem;
       border-radius: 62.4375rem;
-      border: 1px solid rgba(214,221,230,.95);
+      border: 1px solid rgba(214, 221, 230, .95);
       color: var(--muted);
-      background: rgba(0,0,0,.02);
+      background: rgba(0, 0, 0, .02);
       white-space: nowrap;
     }
-    html[data-theme="dark"] .pill{
-      border-color: rgba(34,48,68,.9);
-      background: rgba(0,0,0,.12);
+
+    html[data-theme="dark"] .pill {
+      border-color: rgba(34, 48, 68, .9);
+      background: rgba(0, 0, 0, .12);
     }
 
-    .list-add{
+    .list-add {
       display: flex;
       gap: 0.5rem;
       padding: 0.625rem 0.75rem 0.75rem 0.75rem;
-      border-bottom: 1px solid rgba(214,221,230,.75);
-    }
-    html[data-theme="dark"] .list-add{
-      border-bottom-color: rgba(34,48,68,.6);
+      border-bottom: 1px solid rgba(214, 221, 230, .75);
     }
 
-    .add-input{
+    html[data-theme="dark"] .list-add {
+      border-bottom-color: rgba(34, 48, 68, .6);
+    }
+
+    .add-input {
       flex: 1;
-      border: 1px solid rgba(214,221,230,.95);
-      background: rgba(0,0,0,.02);
+      border: 1px solid rgba(214, 221, 230, .95);
+      background: rgba(0, 0, 0, .02);
       color: var(--text);
       padding: 0.625rem 0.625rem;
       border-radius: 0.625rem;
       outline: none;
       font-size: 0.8125rem;
     }
-    html[data-theme="dark"] .add-input{
-      border-color: rgba(34,48,68,.9);
-      background: rgba(0,0,0,.12);
-    }
-    .add-input:focus{
-      border-color: rgba(11,99,255,.65);
-      box-shadow: 0 0 0 3px rgba(11,99,255,.10);
-    }
-    html[data-theme="dark"] .add-input:focus{
-      border-color: rgba(90,169,255,.7);
-      box-shadow: 0 0 0 3px rgba(90,169,255,.12);
+
+    html[data-theme="dark"] .add-input {
+      border-color: rgba(34, 48, 68, .9);
+      background: rgba(0, 0, 0, .12);
     }
 
-    .list-body{
+    .add-input:focus {
+      border-color: rgba(11, 99, 255, .65);
+      box-shadow: 0 0 0 3px rgba(11, 99, 255, .10);
+    }
+
+    html[data-theme="dark"] .add-input:focus {
+      border-color: rgba(90, 169, 255, .7);
+      box-shadow: 0 0 0 3px rgba(90, 169, 255, .12);
+    }
+
+    .list-body {
       padding: 0.625rem 0.75rem 0.875rem 0.75rem;
       overflow: visible;
     }
 
-    .items{
+    .items {
       margin: 0;
       padding: 0;
       list-style: none;
       display: flex;
       gap: 0.625rem;
     }
-    .items.vertical{ flex-direction: column; }
-    .items.horizontal{ flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
 
-    .item{
-      border: 1px solid rgba(214,221,230,.95);
-      background: var(--item-bg, rgba(0,0,0,.02));
+    .items.vertical {
+      flex-direction: column;
+    }
+
+    .items.horizontal {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .item {
+      border: 1px solid rgba(214, 221, 230, .95);
+      background: var(--item-bg, rgba(0, 0, 0, .02));
       border-radius: 0.75rem;
       padding: 0.625rem;
       display: flex;
@@ -500,26 +592,31 @@ html, body{ height: 100%; }
       gap: 0.5rem;
       width: 100%;
     }
-    html[data-theme="dark"] .item{
-      border-color: rgba(34,48,68,.85);
-      background: var(--item-bg, rgba(0,0,0,.10));
+
+    html[data-theme="dark"] .item {
+      border-color: rgba(34, 48, 68, .85);
+      background: var(--item-bg, rgba(0, 0, 0, .10));
     }
 
-    .items.horizontal > .item{
+    .items.horizontal>.item {
       width: calc(50% - 0.3125rem);
       min-width: 17.5rem;
     }
-    @media (max-width: 600px){
-      .items.horizontal > .item{ width: 100%; min-width: 0; }
+
+    @media (max-width: 600px) {
+      .items.horizontal>.item {
+        width: 100%;
+        min-width: 0;
+      }
     }
 
-    .item-row{
+    .item-row {
       display: flex;
       gap: 0.625rem;
       align-items: center;
     }
 
-    .ck{
+    .ck {
       margin-top: 0;
       width: 1.125rem;
       height: 1.125rem;
@@ -528,55 +625,62 @@ html, body{ height: 100%; }
       flex: 0 0 auto;
     }
 
-    .text{
+    .text {
       flex: 1;
       min-width: 0;
-      border: 1px solid rgba(214,221,230,.95);
-      background: rgba(0,0,0,.02);
+      border: 1px solid rgba(214, 221, 230, .95);
+      background: rgba(0, 0, 0, .02);
       color: var(--text);
       padding: 0.5rem 0.625rem;
       border-radius: 0.625rem;
       outline: none;
       font-size: 0.8125rem;
     }
-    html[data-theme="dark"] .text{
-      border-color: rgba(34,48,68,.85);
-      background: rgba(0,0,0,.10);
+
+    html[data-theme="dark"] .text {
+      border-color: rgba(34, 48, 68, .85);
+      background: rgba(0, 0, 0, .10);
     }
-    .text:focus{
-      border-color: rgba(11,99,255,.65);
-      box-shadow: 0 0 0 3px rgba(11,99,255,.10);
+
+    .text:focus {
+      border-color: rgba(11, 99, 255, .65);
+      box-shadow: 0 0 0 3px rgba(11, 99, 255, .10);
     }
-    html[data-theme="dark"] .text:focus{
-      border-color: rgba(90,169,255,.65);
-      box-shadow: 0 0 0 3px rgba(90,169,255,.10);
+
+    html[data-theme="dark"] .text:focus {
+      border-color: rgba(90, 169, 255, .65);
+      box-shadow: 0 0 0 3px rgba(90, 169, 255, .10);
     }
 
     /* Text wrap + autosize (liste başlığı + madde metni) */
-    .title-input, .text{
+    .title-input,
+    .text {
       font-family: inherit;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
       word-break: break-word;
       hyphens: auto;
     }
-    textarea.title-input, textarea.text{
+
+    textarea.title-input,
+    textarea.text {
       resize: none;
       overflow: hidden;
       height: auto;
     }
 
-    .text.done{
+    .text.done {
       text-decoration: line-through;
-      color: rgba(11,18,32,.55);
-      border-color: rgba(13,138,90,.28);
-    }
-    html[data-theme="dark"] .text.done{
-      color: rgba(230,237,243,.65);
-      border-color: rgba(61,220,151,.25);
+      color: rgba(11, 18, 32, .55);
+      border-color: rgba(13, 138, 90, .28);
     }
 
-    .item-actions{
+    html[data-theme="dark"] .text.done {
+      color: rgba(230, 237, 243, .65);
+      border-color: rgba(61, 220, 151, .25);
+    }
+
+    .item-actions {
       display: flex;
       gap: 0.5rem;
       flex-wrap: wrap;
@@ -584,53 +688,65 @@ html, body{ height: 100%; }
       margin-top: -2px;
     }
 
-    .mini{
+    .mini {
       padding: 0.4375rem 0.625rem;
       font-size: 0.75rem;
       border-radius: 0.625rem;
     }
-    .mini.ok{
-      border-color: rgba(13,138,90,.35);
-      background: rgba(13,138,90,.08);
-    }
-    html[data-theme="dark"] .mini.ok{
-      border-color: rgba(61,220,151,.4);
-      background: rgba(61,220,151,.10);
+
+    .mini.ok {
+      border-color: rgba(13, 138, 90, .35);
+      background: rgba(13, 138, 90, .08);
     }
 
-    .mini.del{
-      border-color: rgba(217,44,74,.35);
-      background: rgba(217,44,74,.08);
-    }
-    html[data-theme="dark"] .mini.del{
-      border-color: rgba(255,90,122,.5);
-      background: rgba(255,90,122,.10);
+    html[data-theme="dark"] .mini.ok {
+      border-color: rgba(61, 220, 151, .4);
+      background: rgba(61, 220, 151, .10);
     }
 
-    .children{
+    .mini.del {
+      border-color: rgba(217, 44, 74, .35);
+      background: rgba(217, 44, 74, .08);
+    }
+
+    html[data-theme="dark"] .mini.del {
+      border-color: rgba(255, 90, 122, .5);
+      background: rgba(255, 90, 122, .10);
+    }
+
+    .children {
       margin: 0 0 0 1.375rem;
       padding: 0;
       list-style: none;
       display: flex;
       gap: 0.625rem;
     }
-    .children.vertical{ flex-direction: column; }
-    .children.horizontal{ flex-direction: row; flex-wrap: wrap; }
-    .children .item{
-      background: var(--item-bg, rgba(0,0,0,.01));
-    }
-    html[data-theme="dark"] .children .item{
-      background: var(--item-bg, rgba(0,0,0,.08));
+
+    .children.vertical {
+      flex-direction: column;
     }
 
-    .empty{
+    .children.horizontal {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .children .item {
+      background: var(--item-bg, rgba(0, 0, 0, .01));
+    }
+
+    html[data-theme="dark"] .children .item {
+      background: var(--item-bg, rgba(0, 0, 0, .08));
+    }
+
+    .empty {
       color: var(--muted);
       font-size: 0.8125rem;
       font-family: var(--mono);
       padding: 0.5rem 2px;
     }
 
-    .toast{
+    .toast {
       position: fixed;
       right: 1rem;
       bottom: 1rem;
@@ -638,37 +754,47 @@ html, body{ height: 100%; }
       padding: 0.625rem 0.75rem;
       border-radius: 0.75rem;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,.92);
-      box-shadow: 0 0.75rem 2.5rem rgba(0,0,0,.18);
+      background: rgba(255, 255, 255, .92);
+      box-shadow: 0 0.75rem 2.5rem rgba(0, 0, 0, .18);
       color: var(--text);
       font-size: 0.8125rem;
       display: none;
       gap: 0.625rem;
       align-items: flex-start;
     }
-    html[data-theme="dark"] .toast{
-      background: rgba(17,24,34,.92);
-      box-shadow: 0 0.75rem 2.5rem rgba(0,0,0,.35);
+
+    html[data-theme="dark"] .toast {
+      background: rgba(17, 24, 34, .92);
+      box-shadow: 0 0.75rem 2.5rem rgba(0, 0, 0, .35);
     }
-    .toast.show{ display: flex; }
-    .toast .tag{
+
+    .toast.show {
+      display: flex;
+    }
+
+    .toast .tag {
       font-family: var(--mono);
       font-size: 0.6875rem;
       padding: 0.25rem 0.4375rem;
       border-radius: 62.4375rem;
-      border: 1px solid rgba(11,99,255,.45);
-      background: rgba(11,99,255,.08);
+      border: 1px solid rgba(11, 99, 255, .45);
+      background: rgba(11, 99, 255, .08);
       color: var(--text);
       white-space: nowrap;
       margin-top: 1px;
     }
-    html[data-theme="dark"] .toast .tag{
-      border-color: rgba(90,169,255,.55);
-      background: rgba(90,169,255,.10);
+
+    html[data-theme="dark"] .toast .tag {
+      border-color: rgba(90, 169, 255, .55);
+      background: rgba(90, 169, 255, .10);
     }
-    .toast .msg{ color: var(--text); }
+
+    .toast .msg {
+      color: var(--text);
+    }
   </style>
 </head>
+
 <body>
   <div class="app">
     <div class="topbar">
@@ -703,682 +829,682 @@ html, body{ height: 100%; }
     <div class="msg" id="toastMsg"></div>
   </div>
 
-<script>
-(() => {
-  "use strict";
-
-  const LS_KEY = "nested_todo_v1";
-  const VERSION = 1;
-
-  const DEFAULT_LIST_ALPHA = 0.7; // list background alpha (saved per-list)
-
-  /** @type {{version:number, updatedAt:number, theme:"light"|"dark", lists:Array<ListState>}} */
-  let state = { version: VERSION, updatedAt: Date.now(), theme: "light", lists: [] };
-
-  /** Focus after render */
-  let pendingFocus = { listId: null, itemId: null };
-
-  let saveTimer = null;
-
-  const $lists = document.getElementById("lists");
-  const $meta  = document.getElementById("saveMeta");
-  const $toast = document.getElementById("toast");
-  const $toastTag = document.getElementById("toastTag");
-  const $toastMsg = document.getElementById("toastMsg");
-  const $btnTheme = document.getElementById("btnTheme");
-
-  $btnTheme.addEventListener("click", () => {
-    state.theme = (state.theme === "light") ? "dark" : "light";
-    applyTheme();
-    touch(true);
-  });
-
-  document.getElementById("btnNewList").addEventListener("click", () => {
-    const list = makeList("Yeni Liste");
-    state.lists.unshift(list);
-    touch();
-    pendingFocus = { listId: list.id, itemId: null };
-    render();
-    toast("OK", "Yeni liste oluşturuldu.");
-  });
-
-  document.getElementById("btnDownload").addEventListener("click", () => {
-    downloadBackup();
-  });
-
-  document.getElementById("fileUpload").addEventListener("change", async (e) => {
-  const file = e.target.files && e.target.files[0];
-  e.target.value = "";
-  if (!file) return;
-
-  try {
-    const text = await file.text();
-    const obj = JSON.parse(text);
-    const incoming = validateAndMigrate(obj);
-
-    // Append-only import:
-    // - Var olan Local Storage kaydı silinmez.
-    // - Aynı adlı liste, aynı maddelerle gelirse (eşdeğer) tekrar eklenmez.
-    // - Liste adı aynı ama maddelerden herhangi biri farklıysa, farklı liste sayılır ve eklenir.
-    const existingSigs = new Set(state.lists.map(listSignature));
-    let added = 0;
-    let skipped = 0;
-
-    for (const list of incoming.lists) {
-      const sig = listSignature(list);
-      if (existingSigs.has(sig)) { skipped++; continue; }
-
-      state.lists.push(cloneListWithFreshIds(list));
-      existingSigs.add(sig);
-      added++;
-    }
-
-    state.updatedAt = Date.now();
-    touch();
-    render();
-    toast("OK", `Yükleme tamamlandı: +${added} yeni liste, ${skipped} eşdeğer liste atlandı.`);
-  } catch (err) {
-    console.error(err);
-    toast("HATA", "Yükleme başarısız: Geçersiz JSON veya beklenmeyen format.");
-  }
-});
-
-  // Event delegation: clicks
-  $lists.addEventListener("click", (e) => {
-    const btn = e.target.closest("button");
-    if (!btn) return;
-
-    const listId = btn.dataset.listId;
-    const itemId = btn.dataset.itemId;
-    const action = btn.dataset.action;
-
-    if (!action) return;
-
-    // Custom number spinners (mobile-friendly)
-    if (action === "spinUp" || action === "spinDown") {
-      const wrap = btn.closest(".num");
-      const input = wrap ? wrap.querySelector('input[type="number"]') : null;
-      if (!input) return;
-
-      // Parse step/min/max safely:
-      // - If min/max attribute is missing, input.min/input.max are "" (Number("") === 0) which would break ordering.
-      const stepAttr = input.getAttribute("step");
-      const stepNum = (stepAttr && stepAttr !== "any") ? Number(stepAttr) : NaN;
-      const step = (Number.isFinite(stepNum) && stepNum > 0) ? stepNum : 1;
-
-      const minAttr = input.getAttribute("min");
-      const maxAttr = input.getAttribute("max");
-      const min = (minAttr !== null && minAttr !== "") ? Number(minAttr) : NaN;
-      const max = (maxAttr !== null && maxAttr !== "") ? Number(maxAttr) : NaN;
-
-      const cur = Number(input.value);
-
-      let next = Number.isFinite(cur) ? cur : (Number.isFinite(min) ? min : 0);
-      next = (action === "spinUp") ? (next + step) : (next - step);
-      if (Number.isFinite(min)) next = Math.max(min, next);
-      if (Number.isFinite(max)) next = Math.min(max, next);
-
-      input.value = String(Math.trunc(next));
-      // Trigger existing reorder logic
-      input.dispatchEvent(new Event("change", { bubbles: true }));
-      return;
-    }
-
-    if (action === "deleteList") {
-      const list = findList(listId);
-      if (!list) return;
-      const ok = confirm(`"${list.title || "Liste"}" silinsin mi?`);
-      if (!ok) return;
-      state.lists = state.lists.filter(x => x.id !== listId);
-      touch();
-      render();
-      toast("OK", "Liste silindi.");
-      return;
-    }
-
-    if (action === "addRootItem") {
-      const input = document.querySelector(`input[data-role="addRoot"][data-list-id="${cssEsc(listId)}"]`);
-      if (!input) return;
-      const text = (input.value || "").trim();
-      if (!text) return;
-      const list = findList(listId);
-      if (!list) return;
-
-      const item = makeItem(text);
-      list.items.push(item);
-      input.value = "";
-      touch();
-      pendingFocus = { listId, itemId: item.id };
-      render();
-      return;
-    }
-
-    if (action === "addChild") {
-      const list = findList(listId);
-      if (!list) return;
-      const target = findItem(list.items, itemId);
-      if (!target) return;
-
-      const child = makeItem("");
-      target.item.children.push(child);
-      touch();
-      pendingFocus = { listId, itemId: child.id };
-      render();
-      toast("OK", "Alt görev eklendi (metnini yaz).");
-      return;
-    }
-
-    if (action === "deleteItem") {
-      const list = findList(listId);
-      if (!list) return;
-      const ok = confirm("Bu madde (alt maddeleriyle birlikte) silinsin mi?");
-      if (!ok) return;
-
-      deleteItemById(list, itemId);
-      touch();
-      render();
-      return;
-    }
-  });
-
-  // Event delegation: checkbox changes
-  $lists.addEventListener("change", (e) => {
-    const ck = e.target;
-    if (!(ck instanceof HTMLInputElement) || ck.type !== "checkbox") return;
-
-    const listId = ck.dataset.listId;
-    const itemId = ck.dataset.itemId;
-
-    const list = findList(listId);
-    if (!list) return;
-
-    const found = findItem(list.items, itemId);
-    if (!found) return;
-
-    const checked = ck.checked;
-
-    if (found.item.children.length === 0) {
-      found.item.done = checked;
-    } else {
-      // Parent toggle: apply to all descendants for predictable behavior
-      setAllDesc(found.item, checked);
-      found.item.done = checked;
-    }
-
-    touch();
-    render();
-  });
-
-
-
-  // Event delegation: order changes (lists + items)
-  // - In-range [1..N] => SWAP
-  // - Out-of-range => MOVE to start/end
-  $lists.addEventListener("change", (e) => {
-    const el = e.target;
-    if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) return;
-
-    if (el.dataset.role === "listColor") {
-      const listId = el.dataset.listId;
-      const list = findList(listId);
-      if (!list) return;
-      const v = normalizeHexColor(el.value);
-      list.color = v || pickListColorForTheme(state.theme);
-      if (!Number.isFinite(Number(list.alpha))) list.alpha = DEFAULT_LIST_ALPHA;
-      touch();
-      render();
-      return;
-    }
-
-    if (el.dataset.role === "listOrder") {
-      const listId = el.dataset.listId;
-      const idx = state.lists.findIndex(l => l.id === listId);
-      if (idx < 0) return;
-
-      const changed = reorderArraySwapOrMove(state.lists, idx, el.value);
-      if (!changed) { render(); return; }
-
-      touch();
-      render();
-      return;
-    }
-
-    if (el.dataset.role === "itemOrder") {
-      const listId = el.dataset.listId;
-      const itemId = el.dataset.itemId;
-      const list = findList(listId);
-      if (!list) return;
-
-      const found = findItemWithParent(list.items, itemId);
-      if (!found) return;
-
-      const changed = reorderArraySwapOrMove(found.parent, found.index, el.value);
-      if (!changed) { render(); return; }
-
-      touch();
-      render();
-      return;
-    }
-  });
-  // Event delegation: list title edit + item text edit
-  $lists.addEventListener("input", (e) => {
-    const el = e.target;
-    if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) return;
-
-    if (el.dataset.role === "listTitle") {
-      const listId = el.dataset.listId;
-      const list = findList(listId);
-      if (!list) return;
-      list.title = el.value;
-      touch(false);
-      if (el instanceof HTMLTextAreaElement) autosizeTextarea(el);
-      return;
-    }
-
-    if (el.dataset.role === "itemText") {
-      const listId = el.dataset.listId;
-      const itemId = el.dataset.itemId;
-      const list = findList(listId);
-      if (!list) return;
-      const found = findItem(list.items, itemId);
-      if (!found) return;
-      found.item.text = el.value;
-      touch(false);
-      if (el instanceof HTMLTextAreaElement) autosizeTextarea(el);
-      return;
-    }
-  });
-
-  // Add root item on Enter
-  $lists.addEventListener("keydown", (e) => {
-    const el = e.target;
-    if (!(el instanceof HTMLInputElement)) return;
-
-    if (e.key === "Enter" && (el.dataset.role === "listOrder" || el.dataset.role === "itemOrder")) {
-      e.preventDefault();
-      el.blur();
-      return;
-    }
-
-    if (e.key === "Enter" && (el.dataset.role === "listTitle" || el.dataset.role === "itemText")) {
-      e.preventDefault();
-      return;
-    }
-
-    if (e.key === "Enter" && el.dataset.role === "addRoot") {
-      e.preventDefault();
-      const listId = el.dataset.listId;
-      const btn = document.querySelector(`button[data-action="addRootItem"][data-list-id="${cssEsc(listId)}"]`);
-      if (btn) btn.click();
-    }
-  });
-
-  function applyTheme() {
-    const theme = (state.theme === "dark") ? "dark" : "light";
-    document.documentElement.dataset.theme = theme;
-    $btnTheme.textContent = `Tema: ${theme === "light" ? "Açık" : "Koyu"}`;
-  }
-
-  function touch(showToastOnSave = false) {
-    state.updatedAt = Date.now();
-    scheduleSave(showToastOnSave);
-  }
-
-  function scheduleSave(showToastOnSave) {
-    if (saveTimer) clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => {
-      saveToStorage();
-      if (showToastOnSave) toast("OK", "Kaydedildi.");
-    }, 220);
-  }
-
-  function saveToStorage() {
-    try {
-      syncOrders();
-      const payload = JSON.stringify(state);
-      localStorage.setItem(LS_KEY, payload);
-      updateMeta();
-    } catch (err) {
-      console.error(err);
-      toast("HATA", "Kaydedilemedi: Local Storage erişimi başarısız.");
-    }
-  }
-
-  function loadFromStorage() {
-    try {
-      const raw = localStorage.getItem(LS_KEY);
-      if (!raw) return;
-      const obj = JSON.parse(raw);
-      state = validateAndMigrate(obj);
-    } catch (err) {
-      console.error(err);
-      state = { version: VERSION, updatedAt: Date.now(), theme: "light", lists: [] };
-    }
-  }
-
-  function updateMeta() {
-    const d = new Date(state.updatedAt);
-    const pad = (n) => String(n).padStart(2, "0");
-    const s = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-    $meta.textContent = `Kayıt: ${s}`;
-  }
-
-  function toast(tag, msg) {
-    $toastTag.textContent = tag;
-    $toastMsg.textContent = msg;
-    $toast.classList.add("show");
-    clearTimeout(toast._t);
-    toast._t = setTimeout(() => $toast.classList.remove("show"), 2600);
-  }
-
-  function downloadBackup() {
-    try {
-      syncOrders();
-      const payload = JSON.stringify(state, null, 2);
-      const blob = new Blob([payload], { type: "application/json" });
-
-      const d = new Date();
-      const pad = (n) => String(n).padStart(2, "0");
-      const name = `todo-yedek-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.json`;
-
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = name;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-
-      toast("OK", "Yedek indirildi.");
-    } catch (err) {
-      console.error(err);
-      toast("HATA", "İndirme başarısız.");
-    }
-  }
-
-  /** Types */
-  /**
-   * @typedef {{id:string, text:string, done:boolean, children:Array<ItemState>}} ItemState
-   * @typedef {{id:string, title:string, color:string, alpha:number, layout:"vertical"|"horizontal", items:Array<ItemState>}} ListState
-   */
-
-  function makeId() {
-    if (crypto && typeof crypto.randomUUID === "function") return crypto.randomUUID();
-    return "id_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
-  }
-
-  function makeItem(text) {
-    return { id: makeId(), order: 0, text: String(text || ""), done: false, children: [] };
-  }
-
-  function makeList(title) {
-    return { id: makeId(), order: 0, title: String(title || "Liste"), color: pickListColorForTheme(state.theme), alpha: DEFAULT_LIST_ALPHA, layout: "vertical", items: [] };
-  }
-
-  // List color helpers
-
-  function normalizeAlpha(a) {
-    const n = Number(a);
-    if (!Number.isFinite(n)) return DEFAULT_LIST_ALPHA;
-    // clamp [0.05..1] to avoid invisible cards; keep user intent
-    return Math.min(1, Math.max(0.05, n));
-  }
-
-  function hexToRgb(hex) {
-    const v = normalizeHexColor(hex);
-    if (!v) return { r: 255, g: 255, b: 255 };
-    const n = parseInt(v.slice(1), 16);
-    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
-  }
-
-  const LIST_COLORS_LIGHT = [
-    "#ffe7ee", "#e8f0ff", "#e7fff3", "#fff2d9", "#f1e8ff",
-    "#e6fff9", "#ffeede", "#eaf7ff", "#f6ffe6", "#fff0f6",
-    "#e9f1ff", "#eafff0"
-  ];
-  const LIST_COLORS_DARK = [
-    "#1a2438", "#132a2a", "#2a1530", "#2b1d16", "#1b2a44",
-    "#162b1f", "#2b1642", "#2b2a16", "#16203a", "#2a1630",
-    "#16302a", "#20162b"
-  ];
-
-  function isHexColor(s) {
-    return typeof s === "string" && /^#([0-9a-fA-F]{6})$/.test(s.trim());
-  }
-
-  function normalizeHexColor(s) {
-    const v = String(s || "").trim();
-    if (/^#([0-9a-fA-F]{6})$/.test(v)) return v.toLowerCase();
-    return "";
-  }
-
-  function pickListColorForTheme(theme) {
-    const pal = (theme === "dark") ? LIST_COLORS_DARK : LIST_COLORS_LIGHT;
-    return pal[Math.floor(Math.random() * pal.length)];
-  }
-
-
-// Nested item gradient helpers (depth-based)
-function clamp01(n) {
-  const x = Number(n);
-  if (!Number.isFinite(x)) return 0;
-  return Math.min(1, Math.max(0, x));
-}
-
-// Depth: 1 = root item, 2 = child item, ...
-// Idea: "kademe düşür" => same base color but reduced alpha per depth.
-// Theme effect comes from underlying background (alpha blending).
-function itemBgGradient(list, depth) {
-  const rgb = hexToRgb(list.color);
-  const baseA = normalizeAlpha(list.alpha);
-
-  // Root items are noticeably softer than the list card itself.
-  const depthSafe = Math.max(1, Math.trunc(Number(depth) || 1));
-
-  const startMul = 0.45;            // depth 1 multiplier
-  const stepMul  = 0.75;            // each deeper level reduces intensity
-  const m = startMul * Math.pow(stepMul, depthSafe - 1);
-
-  const aTop = Math.min(baseA, Math.max(0.05, baseA * m));
-  const aBot = Math.min(baseA, Math.max(0.05, baseA * m * 0.78));
-
-  return `linear-gradient(180deg, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${aTop}), rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${aBot}))`;
-}
-
-
-
-
-// Import helpers (signature + cloning)
-// Eşdeğerlik: liste başlığı + madde metinleri (+ alt görev ağacı) aynıysa aynıdır.
-// Not: id/order/done (checkbox) durumları eşdeğerlikte dikkate alınmaz. (Renk artık eşdeğerlikte dikkate alınır.)
-function normSigText(s) {
-  return String(s ?? "").replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
-}
-
-function itemsSignature(items) {
-  if (!Array.isArray(items)) return [];
-  return items.map(it => ({
-    t: normSigText(it && it.text),
-    c: itemsSignature(it && it.children)
-  }));
-}
-
-function listSignature(list) {
-  const title = normSigText(list && list.title);
-  const items = itemsSignature(list && list.items);
-    const color = normalizeHexColor(list && list.color);
-  const alpha = normalizeAlpha(list && list.alpha);
-  return JSON.stringify({ title, color, alpha, items });
-}
-
-function cloneItemsWithFreshIds(items) {
-  if (!Array.isArray(items)) return [];
-  return items.map(it => ({
-    id: makeId(),
-    order: 0,
-    text: String((it && it.text) || ""),
-    done: !!(it && it.done),
-    children: cloneItemsWithFreshIds(it && it.children)
-  }));
-}
-
-function cloneListWithFreshIds(list) {
-  return {
-    id: makeId(),
-    order: 0,
-    title: String((list && list.title) || "Liste"),
-    color: normalizeHexColor(list && list.color) || pickListColorForTheme(state.theme),
-    alpha: normalizeAlpha(list && list.alpha),
-    layout: (list && (list.layout === "horizontal" || list.layout === "vertical")) ? list.layout : "vertical",
-    items: cloneItemsWithFreshIds(list && list.items)
-  };
-}
-
-
-  function findList(listId) {
-    return state.lists.find(l => l.id === listId) || null;
-  }
-
-  function findItem(items, itemId) {
-    for (const it of items) {
-      if (it.id === itemId) return { item: it };
-      const sub = findItem(it.children, itemId);
-      if (sub) return sub;
-    }
-    return null;
-  }
-
-
-  function findItemWithParent(items, itemId) {
-    for (let i = 0; i < items.length; i++) {
-      const it = items[i];
-      if (it.id === itemId) return { parent: items, index: i, item: it };
-      if (it.children && it.children.length) {
-        const sub = findItemWithParent(it.children, itemId);
-        if (sub) return sub;
+  <script>
+    (() => {
+      "use strict";
+
+      const LS_KEY = "nested_todo_v1";
+      const VERSION = 1;
+
+      const DEFAULT_LIST_ALPHA = 0.7; // list background alpha (saved per-list)
+
+      /** @type {{version:number, updatedAt:number, theme:"light"|"dark", lists:Array<ListState>}} */
+      let state = { version: VERSION, updatedAt: Date.now(), theme: "light", lists: [] };
+
+      /** Focus after render */
+      let pendingFocus = { listId: null, itemId: null };
+
+      let saveTimer = null;
+
+      const $lists = document.getElementById("lists");
+      const $meta = document.getElementById("saveMeta");
+      const $toast = document.getElementById("toast");
+      const $toastTag = document.getElementById("toastTag");
+      const $toastMsg = document.getElementById("toastMsg");
+      const $btnTheme = document.getElementById("btnTheme");
+
+      $btnTheme.addEventListener("click", () => {
+        state.theme = (state.theme === "light") ? "dark" : "light";
+        applyTheme();
+        touch(true);
+      });
+
+      document.getElementById("btnNewList").addEventListener("click", () => {
+        const list = makeList("Yeni Liste");
+        state.lists.unshift(list);
+        touch();
+        pendingFocus = { listId: list.id, itemId: null };
+        render();
+        toast("OK", "Yeni liste oluşturuldu.");
+      });
+
+      document.getElementById("btnDownload").addEventListener("click", () => {
+        downloadBackup();
+      });
+
+      document.getElementById("fileUpload").addEventListener("change", async (e) => {
+        const file = e.target.files && e.target.files[0];
+        e.target.value = "";
+        if (!file) return;
+
+        try {
+          const text = await file.text();
+          const obj = JSON.parse(text);
+          const incoming = validateAndMigrate(obj);
+
+          // Append-only import:
+          // - Var olan Local Storage kaydı silinmez.
+          // - Aynı adlı liste, aynı maddelerle gelirse (eşdeğer) tekrar eklenmez.
+          // - Liste adı aynı ama maddelerden herhangi biri farklıysa, farklı liste sayılır ve eklenir.
+          const existingSigs = new Set(state.lists.map(listSignature));
+          let added = 0;
+          let skipped = 0;
+
+          for (const list of incoming.lists) {
+            const sig = listSignature(list);
+            if (existingSigs.has(sig)) { skipped++; continue; }
+
+            state.lists.push(cloneListWithFreshIds(list));
+            existingSigs.add(sig);
+            added++;
+          }
+
+          state.updatedAt = Date.now();
+          touch();
+          render();
+          toast("OK", `Yükleme tamamlandı: +${added} yeni liste, ${skipped} eşdeğer liste atlandı.`);
+        } catch (err) {
+          console.error(err);
+          toast("HATA", "Yükleme başarısız: Geçersiz JSON veya beklenmeyen format.");
+        }
+      });
+
+      // Event delegation: clicks
+      $lists.addEventListener("click", (e) => {
+        const btn = e.target.closest("button");
+        if (!btn) return;
+
+        const listId = btn.dataset.listId;
+        const itemId = btn.dataset.itemId;
+        const action = btn.dataset.action;
+
+        if (!action) return;
+
+        // Custom number spinners (mobile-friendly)
+        if (action === "spinUp" || action === "spinDown") {
+          const wrap = btn.closest(".num");
+          const input = wrap ? wrap.querySelector('input[type="number"]') : null;
+          if (!input) return;
+
+          // Parse step/min/max safely:
+          // - If min/max attribute is missing, input.min/input.max are "" (Number("") === 0) which would break ordering.
+          const stepAttr = input.getAttribute("step");
+          const stepNum = (stepAttr && stepAttr !== "any") ? Number(stepAttr) : NaN;
+          const step = (Number.isFinite(stepNum) && stepNum > 0) ? stepNum : 1;
+
+          const minAttr = input.getAttribute("min");
+          const maxAttr = input.getAttribute("max");
+          const min = (minAttr !== null && minAttr !== "") ? Number(minAttr) : NaN;
+          const max = (maxAttr !== null && maxAttr !== "") ? Number(maxAttr) : NaN;
+
+          const cur = Number(input.value);
+
+          let next = Number.isFinite(cur) ? cur : (Number.isFinite(min) ? min : 0);
+          next = (action === "spinUp") ? (next + step) : (next - step);
+          if (Number.isFinite(min)) next = Math.max(min, next);
+          if (Number.isFinite(max)) next = Math.min(max, next);
+
+          input.value = String(Math.trunc(next));
+          // Trigger existing reorder logic
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+          return;
+        }
+
+        if (action === "deleteList") {
+          const list = findList(listId);
+          if (!list) return;
+          const ok = confirm(`"${list.title || "Liste"}" silinsin mi?`);
+          if (!ok) return;
+          state.lists = state.lists.filter(x => x.id !== listId);
+          touch();
+          render();
+          toast("OK", "Liste silindi.");
+          return;
+        }
+
+        if (action === "addRootItem") {
+          const input = document.querySelector(`input[data-role="addRoot"][data-list-id="${cssEsc(listId)}"]`);
+          if (!input) return;
+          const text = (input.value || "").trim();
+          if (!text) return;
+          const list = findList(listId);
+          if (!list) return;
+
+          const item = makeItem(text);
+          list.items.push(item);
+          input.value = "";
+          touch();
+          pendingFocus = { listId, itemId: item.id };
+          render();
+          return;
+        }
+
+        if (action === "addChild") {
+          const list = findList(listId);
+          if (!list) return;
+          const target = findItem(list.items, itemId);
+          if (!target) return;
+
+          const child = makeItem("");
+          target.item.children.push(child);
+          touch();
+          pendingFocus = { listId, itemId: child.id };
+          render();
+          toast("OK", "Alt görev eklendi (metnini yaz).");
+          return;
+        }
+
+        if (action === "deleteItem") {
+          const list = findList(listId);
+          if (!list) return;
+          const ok = confirm("Bu madde (alt maddeleriyle birlikte) silinsin mi?");
+          if (!ok) return;
+
+          deleteItemById(list, itemId);
+          touch();
+          render();
+          return;
+        }
+      });
+
+      // Event delegation: checkbox changes
+      $lists.addEventListener("change", (e) => {
+        const ck = e.target;
+        if (!(ck instanceof HTMLInputElement) || ck.type !== "checkbox") return;
+
+        const listId = ck.dataset.listId;
+        const itemId = ck.dataset.itemId;
+
+        const list = findList(listId);
+        if (!list) return;
+
+        const found = findItem(list.items, itemId);
+        if (!found) return;
+
+        const checked = ck.checked;
+
+        if (found.item.children.length === 0) {
+          found.item.done = checked;
+        } else {
+          // Parent toggle: apply to all descendants for predictable behavior
+          setAllDesc(found.item, checked);
+          found.item.done = checked;
+        }
+
+        touch();
+        render();
+      });
+
+
+
+      // Event delegation: order changes (lists + items)
+      // - In-range [1..N] => SWAP
+      // - Out-of-range => MOVE to start/end
+      $lists.addEventListener("change", (e) => {
+        const el = e.target;
+        if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) return;
+
+        if (el.dataset.role === "listColor") {
+          const listId = el.dataset.listId;
+          const list = findList(listId);
+          if (!list) return;
+          const v = normalizeHexColor(el.value);
+          list.color = v || pickListColorForTheme(state.theme);
+          if (!Number.isFinite(Number(list.alpha))) list.alpha = DEFAULT_LIST_ALPHA;
+          touch();
+          render();
+          return;
+        }
+
+        if (el.dataset.role === "listOrder") {
+          const listId = el.dataset.listId;
+          const idx = state.lists.findIndex(l => l.id === listId);
+          if (idx < 0) return;
+
+          const changed = reorderArraySwapOrMove(state.lists, idx, el.value);
+          if (!changed) { render(); return; }
+
+          touch();
+          render();
+          return;
+        }
+
+        if (el.dataset.role === "itemOrder") {
+          const listId = el.dataset.listId;
+          const itemId = el.dataset.itemId;
+          const list = findList(listId);
+          if (!list) return;
+
+          const found = findItemWithParent(list.items, itemId);
+          if (!found) return;
+
+          const changed = reorderArraySwapOrMove(found.parent, found.index, el.value);
+          if (!changed) { render(); return; }
+
+          touch();
+          render();
+          return;
+        }
+      });
+      // Event delegation: list title edit + item text edit
+      $lists.addEventListener("input", (e) => {
+        const el = e.target;
+        if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) return;
+
+        if (el.dataset.role === "listTitle") {
+          const listId = el.dataset.listId;
+          const list = findList(listId);
+          if (!list) return;
+          list.title = el.value;
+          touch(false);
+          if (el instanceof HTMLTextAreaElement) autosizeTextarea(el);
+          return;
+        }
+
+        if (el.dataset.role === "itemText") {
+          const listId = el.dataset.listId;
+          const itemId = el.dataset.itemId;
+          const list = findList(listId);
+          if (!list) return;
+          const found = findItem(list.items, itemId);
+          if (!found) return;
+          found.item.text = el.value;
+          touch(false);
+          if (el instanceof HTMLTextAreaElement) autosizeTextarea(el);
+          return;
+        }
+      });
+
+      // Add root item on Enter
+      $lists.addEventListener("keydown", (e) => {
+        const el = e.target;
+        if (!(el instanceof HTMLInputElement)) return;
+
+        if (e.key === "Enter" && (el.dataset.role === "listOrder" || el.dataset.role === "itemOrder")) {
+          e.preventDefault();
+          el.blur();
+          return;
+        }
+
+        if (e.key === "Enter" && (el.dataset.role === "listTitle" || el.dataset.role === "itemText")) {
+          e.preventDefault();
+          return;
+        }
+
+        if (e.key === "Enter" && el.dataset.role === "addRoot") {
+          e.preventDefault();
+          const listId = el.dataset.listId;
+          const btn = document.querySelector(`button[data-action="addRootItem"][data-list-id="${cssEsc(listId)}"]`);
+          if (btn) btn.click();
+        }
+      });
+
+      function applyTheme() {
+        const theme = (state.theme === "dark") ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        $btnTheme.textContent = `Tema: ${theme === "light" ? "Açık" : "Koyu"}`;
       }
-    }
-    return null;
-  }
 
-  // If target position is within [1..N] => SWAP.
-  // If out-of-range => MOVE to start/end.
-  function reorderArraySwapOrMove(arr, fromIndex, rawPos) {
-    const n = arr.length;
-    const raw = Number(rawPos);
-    if (!Number.isFinite(raw)) return false;
+      function touch(showToastOnSave = false) {
+        state.updatedAt = Date.now();
+        scheduleSave(showToastOnSave);
+      }
 
-    const desiredPos = Math.trunc(raw);
+      function scheduleSave(showToastOnSave) {
+        if (saveTimer) clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+          saveToStorage();
+          if (showToastOnSave) toast("OK", "Kaydedildi.");
+        }, 220);
+      }
 
-    if (desiredPos >= 1 && desiredPos <= n) {
-      const toIndex = desiredPos - 1;
-      if (toIndex === fromIndex) return false;
-      const tmp = arr[fromIndex];
-      arr[fromIndex] = arr[toIndex];
-      arr[toIndex] = tmp;
-      return true;
-    }
+      function saveToStorage() {
+        try {
+          syncOrders();
+          const payload = JSON.stringify(state);
+          localStorage.setItem(LS_KEY, payload);
+          updateMeta();
+        } catch (err) {
+          console.error(err);
+          toast("HATA", "Kaydedilemedi: Local Storage erişimi başarısız.");
+        }
+      }
 
-    const [moved] = arr.splice(fromIndex, 1);
-    const insertIndex = (desiredPos < 1) ? 0 : arr.length; // start or end
-    arr.splice(insertIndex, 0, moved);
-    return true;
-  }
+      function loadFromStorage() {
+        try {
+          const raw = localStorage.getItem(LS_KEY);
+          if (!raw) return;
+          const obj = JSON.parse(raw);
+          state = validateAndMigrate(obj);
+        } catch (err) {
+          console.error(err);
+          state = { version: VERSION, updatedAt: Date.now(), theme: "light", lists: [] };
+        }
+      }
 
-  function syncOrders() {
-    for (let i = 0; i < state.lists.length; i++) {
-      const list = state.lists[i];
-      list.order = i + 1;
-      syncItemOrders(list.items);
-    }
-  }
+      function updateMeta() {
+        const d = new Date(state.updatedAt);
+        const pad = (n) => String(n).padStart(2, "0");
+        const s = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+        $meta.textContent = `Kayıt: ${s}`;
+      }
 
-  function syncItemOrders(items) {
-    for (let i = 0; i < items.length; i++) {
-      const it = items[i];
-      it.order = i + 1;
-      if (it.children && it.children.length) syncItemOrders(it.children);
-    }
-  }
+      function toast(tag, msg) {
+        $toastTag.textContent = tag;
+        $toastMsg.textContent = msg;
+        $toast.classList.add("show");
+        clearTimeout(toast._t);
+        toast._t = setTimeout(() => $toast.classList.remove("show"), 2600);
+      }
 
-  function deleteItemById(list, itemId) {
-    const idx = list.items.findIndex(x => x.id === itemId);
-    if (idx >= 0) { list.items.splice(idx, 1); return true; }
-    return deleteItemInChildren(list.items, itemId);
-  }
+      function downloadBackup() {
+        try {
+          syncOrders();
+          const payload = JSON.stringify(state, null, 2);
+          const blob = new Blob([payload], { type: "application/json" });
 
-  function deleteItemInChildren(items, itemId) {
-    for (const it of items) {
-      const idx = it.children.findIndex(x => x.id === itemId);
-      if (idx >= 0) { it.children.splice(idx, 1); return true; }
-      if (deleteItemInChildren(it.children, itemId)) return true;
-    }
-    return false;
-  }
+          const d = new Date();
+          const pad = (n) => String(n).padStart(2, "0");
+          const name = `todo-yedek-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.json`;
 
-  function setAllDesc(item, val) {
-    item.done = !!val;
-    for (const ch of item.children) setAllDesc(ch, val);
-  }
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = name;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
 
-  // Completion rule:
-  // - Leaf: done is user checkbox
-  // - Parent: "fully done" if (done === true) OR (children exist AND ALL descendants fully done)
-  function isFullyDone(item) {
-    if (item.done) return true;
-    if (!item.children || item.children.length === 0) return false;
-    return item.children.every(isFullyDone);
-  }
+          toast("OK", "Yedek indirildi.");
+        } catch (err) {
+          console.error(err);
+          toast("HATA", "İndirme başarısız.");
+        }
+      }
 
-  function anyDoneOrPartial(item) {
-    if (isFullyDone(item)) return true;
-    if (item.children && item.children.length) return item.children.some(anyDoneOrPartial);
-    return false;
-  }
+      /** Types */
+      /**
+       * @typedef {{id:string, text:string, done:boolean, children:Array<ItemState>}} ItemState
+       * @typedef {{id:string, title:string, color:string, alpha:number, layout:"vertical"|"horizontal", items:Array<ItemState>}} ListState
+       */
 
-  function getTriState(item) {
-    const hasKids = item.children && item.children.length > 0;
+      function makeId() {
+        if (crypto && typeof crypto.randomUUID === "function") return crypto.randomUUID();
+        return "id_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+      }
 
-    if (!hasKids) {
-      return { checked: !!item.done, indeterminate: false, strike: !!item.done };
-    }
+      function makeItem(text) {
+        return { id: makeId(), order: 0, text: String(text || ""), done: false, children: [] };
+      }
 
-    const all = item.children.every(isFullyDone);
-    const any = item.children.some(anyDoneOrPartial);
+      function makeList(title) {
+        return { id: makeId(), order: 0, title: String(title || "Liste"), color: pickListColorForTheme(state.theme), alpha: DEFAULT_LIST_ALPHA, layout: "vertical", items: [] };
+      }
 
-    const checked = !!item.done || all;
-    const indeterminate = !checked && any;
-    const strike = checked; // çizgi: done veya tüm altlar bitince (checked true)
-    return { checked, indeterminate, strike };
-  }
+      // List color helpers
+
+      function normalizeAlpha(a) {
+        const n = Number(a);
+        if (!Number.isFinite(n)) return DEFAULT_LIST_ALPHA;
+        // clamp [0.05..1] to avoid invisible cards; keep user intent
+        return Math.min(1, Math.max(0.05, n));
+      }
+
+      function hexToRgb(hex) {
+        const v = normalizeHexColor(hex);
+        if (!v) return { r: 255, g: 255, b: 255 };
+        const n = parseInt(v.slice(1), 16);
+        return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+      }
+
+      const LIST_COLORS_LIGHT = [
+        "#ffe7ee", "#e8f0ff", "#e7fff3", "#fff2d9", "#f1e8ff",
+        "#e6fff9", "#ffeede", "#eaf7ff", "#f6ffe6", "#fff0f6",
+        "#e9f1ff", "#eafff0"
+      ];
+      const LIST_COLORS_DARK = [
+        "#1a2438", "#132a2a", "#2a1530", "#2b1d16", "#1b2a44",
+        "#162b1f", "#2b1642", "#2b2a16", "#16203a", "#2a1630",
+        "#16302a", "#20162b"
+      ];
+
+      function isHexColor(s) {
+        return typeof s === "string" && /^#([0-9a-fA-F]{6})$/.test(s.trim());
+      }
+
+      function normalizeHexColor(s) {
+        const v = String(s || "").trim();
+        if (/^#([0-9a-fA-F]{6})$/.test(v)) return v.toLowerCase();
+        return "";
+      }
+
+      function pickListColorForTheme(theme) {
+        const pal = (theme === "dark") ? LIST_COLORS_DARK : LIST_COLORS_LIGHT;
+        return pal[Math.floor(Math.random() * pal.length)];
+      }
 
 
-  function autosizeTextarea(el) {
-    if (!el) return;
-    el.style.height = "auto";
-    el.style.height = `${el.scrollHeight}px`;
-  }
+      // Nested item gradient helpers (depth-based)
+      function clamp01(n) {
+        const x = Number(n);
+        if (!Number.isFinite(x)) return 0;
+        return Math.min(1, Math.max(0, x));
+      }
 
-  function autosizeAll() {
-    const els = $lists.querySelectorAll("textarea.autosize");
-    for (const el of els) autosizeTextarea(el);
-  }
+      // Depth: 1 = root item, 2 = child item, ...
+      // Idea: "kademe düşür" => same base color but reduced alpha per depth.
+      // Theme effect comes from underlying background (alpha blending).
+      function itemBgGradient(list, depth) {
+        const rgb = hexToRgb(list.color);
+        const baseA = normalizeAlpha(list.alpha);
 
-  function render() {
-    $lists.innerHTML = "";
+        // Root items are noticeably softer than the list card itself.
+        const depthSafe = Math.max(1, Math.trunc(Number(depth) || 1));
 
-    syncOrders();
+        const startMul = 0.45;            // depth 1 multiplier
+        const stepMul = 0.75;            // each deeper level reduces intensity
+        const m = startMul * Math.pow(stepMul, depthSafe - 1);
 
-    const single = window.matchMedia("(max-width: 768px)").matches;
+        const aTop = Math.min(baseA, Math.max(0.05, baseA * m));
+        const aBot = Math.min(baseA, Math.max(0.05, baseA * m * 0.78));
 
-    if (!state.lists.length) {
-      // Empty state: tek kolon (tam genişlik) daha temiz
-      $lists.className = "lists one-col";
+        return `linear-gradient(180deg, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${aTop}), rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${aBot}))`;
+      }
 
-      const box = document.createElement("div");
-      box.className = "list-card";
-      box.innerHTML = `
+
+
+
+      // Import helpers (signature + cloning)
+      // Eşdeğerlik: liste başlığı + madde metinleri (+ alt görev ağacı) aynıysa aynıdır.
+      // Not: id/order/done (checkbox) durumları eşdeğerlikte dikkate alınmaz. (Renk artık eşdeğerlikte dikkate alınır.)
+      function normSigText(s) {
+        return String(s ?? "").replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
+      }
+
+      function itemsSignature(items) {
+        if (!Array.isArray(items)) return [];
+        return items.map(it => ({
+          t: normSigText(it && it.text),
+          c: itemsSignature(it && it.children)
+        }));
+      }
+
+      function listSignature(list) {
+        const title = normSigText(list && list.title);
+        const items = itemsSignature(list && list.items);
+        const color = normalizeHexColor(list && list.color);
+        const alpha = normalizeAlpha(list && list.alpha);
+        return JSON.stringify({ title, color, alpha, items });
+      }
+
+      function cloneItemsWithFreshIds(items) {
+        if (!Array.isArray(items)) return [];
+        return items.map(it => ({
+          id: makeId(),
+          order: 0,
+          text: String((it && it.text) || ""),
+          done: !!(it && it.done),
+          children: cloneItemsWithFreshIds(it && it.children)
+        }));
+      }
+
+      function cloneListWithFreshIds(list) {
+        return {
+          id: makeId(),
+          order: 0,
+          title: String((list && list.title) || "Liste"),
+          color: normalizeHexColor(list && list.color) || pickListColorForTheme(state.theme),
+          alpha: normalizeAlpha(list && list.alpha),
+          layout: (list && (list.layout === "horizontal" || list.layout === "vertical")) ? list.layout : "vertical",
+          items: cloneItemsWithFreshIds(list && list.items)
+        };
+      }
+
+
+      function findList(listId) {
+        return state.lists.find(l => l.id === listId) || null;
+      }
+
+      function findItem(items, itemId) {
+        for (const it of items) {
+          if (it.id === itemId) return { item: it };
+          const sub = findItem(it.children, itemId);
+          if (sub) return sub;
+        }
+        return null;
+      }
+
+
+      function findItemWithParent(items, itemId) {
+        for (let i = 0; i < items.length; i++) {
+          const it = items[i];
+          if (it.id === itemId) return { parent: items, index: i, item: it };
+          if (it.children && it.children.length) {
+            const sub = findItemWithParent(it.children, itemId);
+            if (sub) return sub;
+          }
+        }
+        return null;
+      }
+
+      // If target position is within [1..N] => SWAP.
+      // If out-of-range => MOVE to start/end.
+      function reorderArraySwapOrMove(arr, fromIndex, rawPos) {
+        const n = arr.length;
+        const raw = Number(rawPos);
+        if (!Number.isFinite(raw)) return false;
+
+        const desiredPos = Math.trunc(raw);
+
+        if (desiredPos >= 1 && desiredPos <= n) {
+          const toIndex = desiredPos - 1;
+          if (toIndex === fromIndex) return false;
+          const tmp = arr[fromIndex];
+          arr[fromIndex] = arr[toIndex];
+          arr[toIndex] = tmp;
+          return true;
+        }
+
+        const [moved] = arr.splice(fromIndex, 1);
+        const insertIndex = (desiredPos < 1) ? 0 : arr.length; // start or end
+        arr.splice(insertIndex, 0, moved);
+        return true;
+      }
+
+      function syncOrders() {
+        for (let i = 0; i < state.lists.length; i++) {
+          const list = state.lists[i];
+          list.order = i + 1;
+          syncItemOrders(list.items);
+        }
+      }
+
+      function syncItemOrders(items) {
+        for (let i = 0; i < items.length; i++) {
+          const it = items[i];
+          it.order = i + 1;
+          if (it.children && it.children.length) syncItemOrders(it.children);
+        }
+      }
+
+      function deleteItemById(list, itemId) {
+        const idx = list.items.findIndex(x => x.id === itemId);
+        if (idx >= 0) { list.items.splice(idx, 1); return true; }
+        return deleteItemInChildren(list.items, itemId);
+      }
+
+      function deleteItemInChildren(items, itemId) {
+        for (const it of items) {
+          const idx = it.children.findIndex(x => x.id === itemId);
+          if (idx >= 0) { it.children.splice(idx, 1); return true; }
+          if (deleteItemInChildren(it.children, itemId)) return true;
+        }
+        return false;
+      }
+
+      function setAllDesc(item, val) {
+        item.done = !!val;
+        for (const ch of item.children) setAllDesc(ch, val);
+      }
+
+      // Completion rule:
+      // - Leaf: done is user checkbox
+      // - Parent: "fully done" if (done === true) OR (children exist AND ALL descendants fully done)
+      function isFullyDone(item) {
+        if (item.done) return true;
+        if (!item.children || item.children.length === 0) return false;
+        return item.children.every(isFullyDone);
+      }
+
+      function anyDoneOrPartial(item) {
+        if (isFullyDone(item)) return true;
+        if (item.children && item.children.length) return item.children.some(anyDoneOrPartial);
+        return false;
+      }
+
+      function getTriState(item) {
+        const hasKids = item.children && item.children.length > 0;
+
+        if (!hasKids) {
+          return { checked: !!item.done, indeterminate: false, strike: !!item.done };
+        }
+
+        const all = item.children.every(isFullyDone);
+        const any = item.children.some(anyDoneOrPartial);
+
+        const checked = !!item.done || all;
+        const indeterminate = !checked && any;
+        const strike = checked; // çizgi: done veya tüm altlar bitince (checked true)
+        return { checked, indeterminate, strike };
+      }
+
+
+      function autosizeTextarea(el) {
+        if (!el) return;
+        el.style.height = "auto";
+        el.style.height = `${el.scrollHeight}px`;
+      }
+
+      function autosizeAll() {
+        const els = $lists.querySelectorAll("textarea.autosize");
+        for (const el of els) autosizeTextarea(el);
+      }
+
+      function render() {
+        $lists.innerHTML = "";
+
+        syncOrders();
+
+        const single = window.matchMedia("(max-width: 768px)").matches;
+
+        if (!state.lists.length) {
+          // Empty state: tek kolon (tam genişlik) daha temiz
+          $lists.className = "lists one-col";
+
+          const box = document.createElement("div");
+          box.className = "list-card";
+          box.innerHTML = `
         <div class="list-head">
           <div class="list-title">
             <textarea class="title-input autosize" rows="1" disabled>Henüz liste yok</textarea>
@@ -1391,42 +1517,42 @@ function cloneListWithFreshIds(list) {
           <div class="empty">Bir liste oluşturup görev ekleyebilirsin. Alt görev için her maddede “Alt görev +” kullan.</div>
         </div>
       `;
-      $lists.appendChild(box);
-      updateMeta();
-      return;
-    }
+          $lists.appendChild(box);
+          updateMeta();
+          return;
+        }
 
-    // Desktop (>= 769px): iki bağımsız kolon (1-3-5... / 2-4-6...) => boşluk oluşmaz
-    // Mobile (<= 768px): tek kolon ve kaynak sırası korunur
-    $lists.className = `lists ${single ? "one-col" : "two-col"}`;
+        // Desktop (>= 769px): iki bağımsız kolon (1-3-5... / 2-4-6...) => boşluk oluşmaz
+        // Mobile (<= 768px): tek kolon ve kaynak sırası korunur
+        $lists.className = `lists ${single ? "one-col" : "two-col"}`;
 
-    let colA = null;
-    let colB = null;
+        let colA = null;
+        let colB = null;
 
-    if (!single) {
-      colA = document.createElement("div");
-      colA.className = "lists-col";
-      colB = document.createElement("div");
-      colB.className = "lists-col";
-      $lists.appendChild(colA);
-      $lists.appendChild(colB);
-    }
+        if (!single) {
+          colA = document.createElement("div");
+          colA.className = "lists-col";
+          colB = document.createElement("div");
+          colB.className = "lists-col";
+          $lists.appendChild(colA);
+          $lists.appendChild(colB);
+        }
 
-    for (let listIdx = 0; listIdx < state.lists.length; listIdx++) {
-      const list = state.lists[listIdx];
-      if (!isHexColor(list.color)) list.color = pickListColorForTheme(state.theme);
-      if (!Number.isFinite(Number(list.alpha))) list.alpha = DEFAULT_LIST_ALPHA;
-      const card = document.createElement("div");
-      card.className = "list-card";
-            const a = normalizeAlpha(list.alpha);
-      if (a !== list.alpha) list.alpha = a;
-      const rgb = hexToRgb(list.color);
-      card.style.setProperty("--list-bg", `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${list.alpha})`);
+        for (let listIdx = 0; listIdx < state.lists.length; listIdx++) {
+          const list = state.lists[listIdx];
+          if (!isHexColor(list.color)) list.color = pickListColorForTheme(state.theme);
+          if (!Number.isFinite(Number(list.alpha))) list.alpha = DEFAULT_LIST_ALPHA;
+          const card = document.createElement("div");
+          card.className = "list-card";
+          const a = normalizeAlpha(list.alpha);
+          if (a !== list.alpha) list.alpha = a;
+          const rgb = hexToRgb(list.color);
+          card.style.setProperty("--list-bg", `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${list.alpha})`);
 
-      const itemCount = countItems(list.items);
-      const doneCount = countDoneItems(list.items);
+          const itemCount = countItems(list.items);
+          const doneCount = countDoneItems(list.items);
 
-      card.innerHTML = `
+          card.innerHTML = `
         <div class="list-head">
           <div class="list-title">
             <div class="order-wrap" title="Liste sırası">
@@ -1468,38 +1594,38 @@ function cloneListWithFreshIds(list) {
         </div>
       `;
 
-      const mount = single ? $lists : ((listIdx % 2 === 0) ? colA : colB);
-      mount.appendChild(card);
-    }
+          const mount = single ? $lists : ((listIdx % 2 === 0) ? colA : colB);
+          mount.appendChild(card);
+        }
 
-    applyTriStates();
-    autosizeAll();
-    focusPending();
-    updateMeta();
-  }
+        applyTriStates();
+        autosizeAll();
+        focusPending();
+        updateMeta();
+      }
 
-  function renderItems(list, items, layout, isRoot, depth) {
-    if (!items || items.length === 0) {
-      return `<div class="empty">${isRoot ? "Henüz madde yok." : "Alt görev yok."}</div>`;
-    }
+      function renderItems(list, items, layout, isRoot, depth) {
+        if (!items || items.length === 0) {
+          return `<div class="empty">${isRoot ? "Henüz madde yok." : "Alt görev yok."}</div>`;
+        }
 
-    const cls = isRoot ? "items" : "children";
-    const ulClass = `${cls} ${layout}`;
+        const cls = isRoot ? "items" : "children";
+        const ulClass = `${cls} ${layout}`;
 
-    const d = Math.max(1, Math.trunc(Number(depth) || 1));
+        const d = Math.max(1, Math.trunc(Number(depth) || 1));
 
-    const liHtml = items.map((it, idx) => renderItem(list, it, layout, idx, d)).join("");
-    return `<ul class="${ulClass}">${liHtml}</ul>`;
-  }
+        const liHtml = items.map((it, idx) => renderItem(list, it, layout, idx, d)).join("");
+        return `<ul class="${ulClass}">${liHtml}</ul>`;
+      }
 
-  function renderItem(list, item, layout, idx, depth) {
-    const st = getTriState(item);
-    const textCls = st.strike ? "text done" : "text";
+      function renderItem(list, item, layout, idx, depth) {
+        const st = getTriState(item);
+        const textCls = st.strike ? "text done" : "text";
 
-    const hasChildren = item.children && item.children.length > 0;
-    const itemBg = itemBgGradient(list, depth);
+        const hasChildren = item.children && item.children.length > 0;
+        const itemBg = itemBgGradient(list, depth);
 
-    return `
+        return `
       <li class="item" style="--item-bg: ${itemBg};" data-item-wrap="${esc(item.id)}">
         <div class="item-row">
           <div class="num">
@@ -1534,163 +1660,164 @@ function cloneListWithFreshIds(list) {
         ${renderItems(list, item.children, layout, false, depth + 1)}
       </li>
     `;
-  }
-
-  function applyTriStates() {
-    const cks = $lists.querySelectorAll('input[type="checkbox"][data-role="itemCk"]');
-    for (const ck of cks) {
-      const listId = ck.dataset.listId;
-      const itemId = ck.dataset.itemId;
-      const list = findList(listId);
-      if (!list) continue;
-      const found = findItem(list.items, itemId);
-      if (!found) continue;
-
-      const st = getTriState(found.item);
-      ck.indeterminate = !!st.indeterminate;
-      ck.checked = !!st.checked;
-    }
-  }
-
-  function focusPending() {
-    if (!pendingFocus.listId) return;
-
-    if (pendingFocus.itemId) {
-      const inp = $lists.querySelector(`[data-role="itemText"][data-list-id="${cssEsc(pendingFocus.listId)}"][data-item-id="${cssEsc(pendingFocus.itemId)}"]`);
-      if (inp) {
-        inp.focus();
-        inp.select();
       }
-    } else {
-      const title = $lists.querySelector(`[data-role="listTitle"][data-list-id="${cssEsc(pendingFocus.listId)}"]`);
-      if (title) {
-        title.focus();
-        title.select();
+
+      function applyTriStates() {
+        const cks = $lists.querySelectorAll('input[type="checkbox"][data-role="itemCk"]');
+        for (const ck of cks) {
+          const listId = ck.dataset.listId;
+          const itemId = ck.dataset.itemId;
+          const list = findList(listId);
+          if (!list) continue;
+          const found = findItem(list.items, itemId);
+          if (!found) continue;
+
+          const st = getTriState(found.item);
+          ck.indeterminate = !!st.indeterminate;
+          ck.checked = !!st.checked;
+        }
       }
-    }
 
-    pendingFocus = { listId: null, itemId: null };
-  }
+      function focusPending() {
+        if (!pendingFocus.listId) return;
 
-  function countItems(items) {
-    let n = 0;
-    for (const it of items) {
-      n++;
-      if (it.children && it.children.length) n += countItems(it.children);
-    }
-    return n;
-  }
+        if (pendingFocus.itemId) {
+          const inp = $lists.querySelector(`[data-role="itemText"][data-list-id="${cssEsc(pendingFocus.listId)}"][data-item-id="${cssEsc(pendingFocus.itemId)}"]`);
+          if (inp) {
+            inp.focus();
+            inp.select();
+          }
+        } else {
+          const title = $lists.querySelector(`[data-role="listTitle"][data-list-id="${cssEsc(pendingFocus.listId)}"]`);
+          if (title) {
+            title.focus();
+            title.select();
+          }
+        }
 
-  function countDoneItems(items) {
-    let n = 0;
-    for (const it of items) {
-      if (isFullyDone(it)) n++;
-      if (it.children && it.children.length) n += countDoneItems(it.children);
-    }
-    return n;
-  }
+        pendingFocus = { listId: null, itemId: null };
+      }
 
-  function validateAndMigrate(obj) {
-    if (!obj || typeof obj !== "object") throw new Error("Invalid state");
-    const ver = Number(obj.version || 1);
+      function countItems(items) {
+        let n = 0;
+        for (const it of items) {
+          n++;
+          if (it.children && it.children.length) n += countItems(it.children);
+        }
+        return n;
+      }
 
-    const nextTheme = (obj.theme === "dark") ? "dark" : "light";
+      function countDoneItems(items) {
+        let n = 0;
+        for (const it of items) {
+          if (isFullyDone(it)) n++;
+          if (it.children && it.children.length) n += countDoneItems(it.children);
+        }
+        return n;
+      }
 
-    const next = {
-      version: VERSION,
-      updatedAt: Number(obj.updatedAt || Date.now()),
-      theme: nextTheme,
-      lists: Array.isArray(obj.lists) ? sortByOrder(obj.lists.map((x, i) => normalizeList(x, i + 1, nextTheme))) : []
-    };
+      function validateAndMigrate(obj) {
+        if (!obj || typeof obj !== "object") throw new Error("Invalid state");
+        const ver = Number(obj.version || 1);
 
-    if (ver > VERSION) {
-      // forward-compat: accept but normalize
-    }
-    return next;
-  }
+        const nextTheme = (obj.theme === "dark") ? "dark" : "light";
 
-  function normalizeList(l, fallbackOrder, theme) {
-    const id = (l && typeof l.id === "string") ? l.id : makeId();
-    const title = (l && typeof l.title === "string") ? l.title : "Liste";
-    const layout = "vertical";
+        const next = {
+          version: VERSION,
+          updatedAt: Number(obj.updatedAt || Date.now()),
+          theme: nextTheme,
+          lists: Array.isArray(obj.lists) ? sortByOrder(obj.lists.map((x, i) => normalizeList(x, i + 1, nextTheme))) : []
+        };
 
-    const orderNum = (l && Number.isFinite(Number(l.order))) ? Math.trunc(Number(l.order)) : Number(fallbackOrder || 0);
-    const order = (orderNum > 0) ? orderNum : 0;
+        if (ver > VERSION) {
+          // forward-compat: accept but normalize
+        }
+        return next;
+      }
 
-    const color = normalizeHexColor(l && l.color) || pickListColorForTheme(theme);
-    const alpha = normalizeAlpha(l && l.alpha);
+      function normalizeList(l, fallbackOrder, theme) {
+        const id = (l && typeof l.id === "string") ? l.id : makeId();
+        const title = (l && typeof l.title === "string") ? l.title : "Liste";
+        const layout = "vertical";
 
-    let items = (l && Array.isArray(l.items)) ? l.items.map((x, i) => normalizeItem(x, i + 1)) : [];
-    items = sortByOrder(items);
+        const orderNum = (l && Number.isFinite(Number(l.order))) ? Math.trunc(Number(l.order)) : Number(fallbackOrder || 0);
+        const order = (orderNum > 0) ? orderNum : 0;
 
-    return { id, order, title, color, alpha, layout, items };
-  }
+        const color = normalizeHexColor(l && l.color) || pickListColorForTheme(theme);
+        const alpha = normalizeAlpha(l && l.alpha);
 
-  function normalizeItem(it, fallbackOrder) {
-    const id = (it && typeof it.id === "string") ? it.id : makeId();
-    const text = (it && typeof it.text === "string") ? it.text : "";
-    const done = !!(it && it.done);
+        let items = (l && Array.isArray(l.items)) ? l.items.map((x, i) => normalizeItem(x, i + 1)) : [];
+        items = sortByOrder(items);
 
-    const orderNum = (it && Number.isFinite(Number(it.order))) ? Math.trunc(Number(it.order)) : Number(fallbackOrder || 0);
-    const order = (orderNum > 0) ? orderNum : 0;
+        return { id, order, title, color, alpha, layout, items };
+      }
 
-    let children = (it && Array.isArray(it.children)) ? it.children.map((x, i) => normalizeItem(x, i + 1)) : [];
-    children = sortByOrder(children);
+      function normalizeItem(it, fallbackOrder) {
+        const id = (it && typeof it.id === "string") ? it.id : makeId();
+        const text = (it && typeof it.text === "string") ? it.text : "";
+        const done = !!(it && it.done);
 
-    return { id, order, text, done, children };
-  }
+        const orderNum = (it && Number.isFinite(Number(it.order))) ? Math.trunc(Number(it.order)) : Number(fallbackOrder || 0);
+        const order = (orderNum > 0) ? orderNum : 0;
 
-  function sortByOrder(arr) {
-    return arr
-      .map((x, i) => ({ x, i }))
-      .sort((a, b) => {
-        const ao = Number(a.x.order || 0);
-        const bo = Number(b.x.order || 0);
-        if (ao !== bo) return ao - bo;
-        return a.i - b.i;
-      })
-      .map(o => o.x);
-  }
+        let children = (it && Array.isArray(it.children)) ? it.children.map((x, i) => normalizeItem(x, i + 1)) : [];
+        children = sortByOrder(children);
 
-  function esc(s) {
-    return String(s).replace(/[&<>"']/g, (c) => (
-      c === "&" ? "&amp;" :
-      c === "<" ? "&lt;" :
-      c === ">" ? "&gt;" :
-      c === '"' ? "&quot;" : "&#39;"
-    ));
-  }
-  function escAttr(s) { return esc(s); }
-  function cssEsc(s) { return String(s).replace(/"/g, '\\"'); }
+        return { id, order, text, done, children };
+      }
 
-  // Init
-  loadFromStorage();
+      function sortByOrder(arr) {
+        return arr
+          .map((x, i) => ({ x, i }))
+          .sort((a, b) => {
+            const ao = Number(a.x.order || 0);
+            const bo = Number(b.x.order || 0);
+            if (ao !== bo) return ao - bo;
+            return a.i - b.i;
+          })
+          .map(o => o.x);
+      }
 
-  // Default open/light if storage empty or invalid
-  if (state.theme !== "dark") state.theme = "light";
+      function esc(s) {
+        return String(s).replace(/[&<>"']/g, (c) => (
+          c === "&" ? "&amp;" :
+            c === "<" ? "&lt;" :
+              c === ">" ? "&gt;" :
+                c === '"' ? "&quot;" : "&#39;"
+        ));
+      }
+      function escAttr(s) { return esc(s); }
+      function cssEsc(s) { return String(s).replace(/"/g, '\\"'); }
 
-  applyTheme();
+      // Init
+      loadFromStorage();
 
-  if (!state.lists.length) {
-    state.lists.push(makeList("Genel"));
-    touch();
-  } else {
-    // Persist order fields into Local Storage (without changing updatedAt)
-    saveToStorage();
-    updateMeta();
-  }
-  render();
+      // Default open/light if storage empty or invalid
+      if (state.theme !== "dark") state.theme = "light";
 
-  // 2-kolon / 1-kolon eşik geçişinde (<=768px) DOM'u yeniden kur: sıralama bozulmasın
-  const layoutMQ = window.matchMedia("(max-width: 768px)");
-  try { layoutMQ.addEventListener("change", () => render()); }
-  catch { layoutMQ.addListener(() => render()); }
+      applyTheme();
 
-  window.addEventListener("beforeunload", () => {
-    try { saveToStorage(); } catch {}
-  });
+      if (!state.lists.length) {
+        state.lists.push(makeList("Genel"));
+        touch();
+      } else {
+        // Persist order fields into Local Storage (without changing updatedAt)
+        saveToStorage();
+        updateMeta();
+      }
+      render();
 
-})();
-</script>
+      // 2-kolon / 1-kolon eşik geçişinde (<=768px) DOM'u yeniden kur: sıralama bozulmasın
+      const layoutMQ = window.matchMedia("(max-width: 768px)");
+      try { layoutMQ.addEventListener("change", () => render()); }
+      catch { layoutMQ.addListener(() => render()); }
+
+      window.addEventListener("beforeunload", () => {
+        try { saveToStorage(); } catch { }
+      });
+
+    })();
+  </script>
 </body>
+
 </html>
