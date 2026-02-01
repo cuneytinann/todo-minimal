@@ -197,15 +197,32 @@ html, body{ height: 100%; }
     .list-card{
       width: 100%;
       border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.80));
+      background: var(--list-bg, linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.80)));
       border-radius: var(--r);
       box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,.08);
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
+
+    /* Subtle sheen so flat colors still look like "cards" */
+    .list-card::before{
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255,255,255,.40), rgba(255,255,255,.12));
+      mix-blend-mode: soft-light;
+    }
+    html[data-theme="dark"] .list-card::before{
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.22));
+      mix-blend-mode: normal;
+      opacity: .9;
+    }
+    .list-card > *{ position: relative; }
     html[data-theme="dark"] .list-card{
-      background: linear-gradient(180deg, rgba(17,24,34,.9), rgba(15,22,32,.82));
+      background: var(--list-bg, linear-gradient(180deg, rgba(17,24,34,.9), rgba(15,22,32,.82)));
       box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,.18);
     }
 
@@ -221,7 +238,8 @@ html, body{ height: 100%; }
     }
 
     .list-head{
-      display: flex;
+      position: relative;
+            display: flex;
       gap: 0.625rem;
       align-items: center;
       justify-content: space-between;
@@ -313,15 +331,103 @@ html, body{ height: 100%; }
     }
     .order-input.item-order{ width: 3.5rem; }
 
+    /* Mobile-friendly custom spin buttons (overlay).
+       Native spinners are inconsistent across mobile browsers. */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button{
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"]{ -moz-appearance: textfield; }
+
+    .num{
+      position: relative;
+      display: inline-block;
+      flex: 0 0 auto;
+    }
+    .num > input[type="number"]{
+      padding-right: 1.5rem; /* room for overlay */
+    }
+
+    .num-spin{
+      position: absolute;
+      top: 0.1875rem;
+      right: 0.1875rem;
+      bottom: 0.1875rem;
+      width: 1.3125rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+      pointer-events: none; /* buttons re-enable */
+    }
+    .spin-btn{
+      pointer-events: auto;
+      flex: 1 1 0;
+      padding: 0;
+      border: 1px solid rgba(214,221,230,.95);
+      background: rgba(255,255,255,.92);
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 0.625rem;
+      line-height: 1;
+      border-radius: 0.375rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: none;
+      transform: none;
+    }
+    html[data-theme="dark"] .spin-btn{
+      border-color: rgba(34,48,68,.85);
+      background: rgba(15,23,35,.92);
+      color: var(--muted);
+    }
+    .spin-btn:active{ transform: none; }
+
     .list-tools{
       display: flex;
       gap: 0.5rem;
       align-items: center;
       flex-wrap: wrap;
       justify-content: flex-end;
+          padding-right: 1.75rem;
     }
 
-    .pill{
+    
+    /* List color control (top-right, layout-safe) */
+    .list-color{
+      position: absolute;
+      top: 0.625rem;
+      right: 0.625rem;
+      width: 1.25rem;
+      height: 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .list-color .color-input{
+      width: 1.25rem;
+      height: 1.25rem;
+      padding: 0;
+      border: 1px solid rgba(0,0,0,.10);
+      border-radius: 0.5rem;
+      background: transparent;
+      cursor: pointer;
+      box-shadow: 0 0.375rem 1rem rgba(0,0,0,.10);
+    }
+    html[data-theme="dark"] .list-color .color-input{
+      border-color: rgba(255,255,255,.14);
+      box-shadow: 0 0.375rem 1rem rgba(0,0,0,.35);
+    }
+    /* Remove default inner padding in some browsers */
+    .list-color .color-input::-webkit-color-swatch-wrapper{ padding: 0; }
+    .list-color .color-input::-webkit-color-swatch{
+      border: none;
+      border-radius: 0.45rem;
+    }
+.pill{
       font-family: var(--mono);
       font-size: 0.6875rem;
       padding: 0.375rem 0.5rem;
@@ -386,7 +492,7 @@ html, body{ height: 100%; }
 
     .item{
       border: 1px solid rgba(214,221,230,.95);
-      background: rgba(0,0,0,.02);
+      background: var(--item-bg, rgba(0,0,0,.02));
       border-radius: 0.75rem;
       padding: 0.625rem;
       display: flex;
@@ -396,7 +502,7 @@ html, body{ height: 100%; }
     }
     html[data-theme="dark"] .item{
       border-color: rgba(34,48,68,.85);
-      background: rgba(0,0,0,.10);
+      background: var(--item-bg, rgba(0,0,0,.10));
     }
 
     .items.horizontal > .item{
@@ -511,10 +617,10 @@ html, body{ height: 100%; }
     .children.vertical{ flex-direction: column; }
     .children.horizontal{ flex-direction: row; flex-wrap: wrap; }
     .children .item{
-      background: rgba(0,0,0,.01);
+      background: var(--item-bg, rgba(0,0,0,.01));
     }
     html[data-theme="dark"] .children .item{
-      background: rgba(0,0,0,.08);
+      background: var(--item-bg, rgba(0,0,0,.08));
     }
 
     .empty{
@@ -604,6 +710,8 @@ html, body{ height: 100%; }
   const LS_KEY = "nested_todo_v1";
   const VERSION = 1;
 
+  const DEFAULT_LIST_ALPHA = 0.7; // list background alpha (saved per-list)
+
   /** @type {{version:number, updatedAt:number, theme:"light"|"dark", lists:Array<ListState>}} */
   let state = { version: VERSION, updatedAt: Date.now(), theme: "light", lists: [] };
 
@@ -639,37 +747,41 @@ html, body{ height: 100%; }
   });
 
   document.getElementById("fileUpload").addEventListener("change", async (e) => {
-    const file = e.target.files && e.target.files[0];
-    e.target.value = "";
-    if (!file) return;
+  const file = e.target.files && e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
 
-    try {
-      const text = await file.text();
-      const obj = JSON.parse(text);
-      const incoming = validateAndMigrate(obj);
+  try {
+    const text = await file.text();
+    const obj = JSON.parse(text);
+    const incoming = validateAndMigrate(obj);
 
-      // Merge import: gelen yedek, mevcut kaydın ÜSTÜNE yazılır (var olan listeler korunur).
-      // Aynı id'li liste gelirse güncellenir; yeni listeler sona eklenir.
-      const indexById = new Map(state.lists.map((l, i) => [l.id, i]));
-      for (const list of incoming.lists) {
-        const idx = indexById.get(list.id);
-        if (idx === undefined) {
-          indexById.set(list.id, state.lists.length);
-          state.lists.push(list);
-        } else {
-          state.lists[idx] = list;
-        }
-      }
+    // Append-only import:
+    // - Var olan Local Storage kaydı silinmez.
+    // - Aynı adlı liste, aynı maddelerle gelirse (eşdeğer) tekrar eklenmez.
+    // - Liste adı aynı ama maddelerden herhangi biri farklıysa, farklı liste sayılır ve eklenir.
+    const existingSigs = new Set(state.lists.map(listSignature));
+    let added = 0;
+    let skipped = 0;
 
-      state.updatedAt = Date.now();
-      touch();
-      render();
-      toast("OK", "Yedek dosyası mevcut kaydın üstüne yazıldı.");
-} catch (err) {
-      console.error(err);
-      toast("HATA", "Yükleme başarısız: Geçersiz JSON veya beklenmeyen format.");
+    for (const list of incoming.lists) {
+      const sig = listSignature(list);
+      if (existingSigs.has(sig)) { skipped++; continue; }
+
+      state.lists.push(cloneListWithFreshIds(list));
+      existingSigs.add(sig);
+      added++;
     }
-  });
+
+    state.updatedAt = Date.now();
+    touch();
+    render();
+    toast("OK", `Yükleme tamamlandı: +${added} yeni liste, ${skipped} eşdeğer liste atlandı.`);
+  } catch (err) {
+    console.error(err);
+    toast("HATA", "Yükleme başarısız: Geçersiz JSON veya beklenmeyen format.");
+  }
+});
 
   // Event delegation: clicks
   $lists.addEventListener("click", (e) => {
@@ -681,6 +793,36 @@ html, body{ height: 100%; }
     const action = btn.dataset.action;
 
     if (!action) return;
+
+    // Custom number spinners (mobile-friendly)
+    if (action === "spinUp" || action === "spinDown") {
+      const wrap = btn.closest(".num");
+      const input = wrap ? wrap.querySelector('input[type="number"]') : null;
+      if (!input) return;
+
+      // Parse step/min/max safely:
+      // - If min/max attribute is missing, input.min/input.max are "" (Number("") === 0) which would break ordering.
+      const stepAttr = input.getAttribute("step");
+      const stepNum = (stepAttr && stepAttr !== "any") ? Number(stepAttr) : NaN;
+      const step = (Number.isFinite(stepNum) && stepNum > 0) ? stepNum : 1;
+
+      const minAttr = input.getAttribute("min");
+      const maxAttr = input.getAttribute("max");
+      const min = (minAttr !== null && minAttr !== "") ? Number(minAttr) : NaN;
+      const max = (maxAttr !== null && maxAttr !== "") ? Number(maxAttr) : NaN;
+
+      const cur = Number(input.value);
+
+      let next = Number.isFinite(cur) ? cur : (Number.isFinite(min) ? min : 0);
+      next = (action === "spinUp") ? (next + step) : (next - step);
+      if (Number.isFinite(min)) next = Math.max(min, next);
+      if (Number.isFinite(max)) next = Math.min(max, next);
+
+      input.value = String(Math.trunc(next));
+      // Trigger existing reorder logic
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      return;
+    }
 
     if (action === "deleteList") {
       const list = findList(listId);
@@ -775,6 +917,18 @@ html, body{ height: 100%; }
   $lists.addEventListener("change", (e) => {
     const el = e.target;
     if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) return;
+
+    if (el.dataset.role === "listColor") {
+      const listId = el.dataset.listId;
+      const list = findList(listId);
+      if (!list) return;
+      const v = normalizeHexColor(el.value);
+      list.color = v || pickListColorForTheme(state.theme);
+      if (!Number.isFinite(Number(list.alpha))) list.alpha = DEFAULT_LIST_ALPHA;
+      touch();
+      render();
+      return;
+    }
 
     if (el.dataset.role === "listOrder") {
       const listId = el.dataset.listId;
@@ -946,7 +1100,7 @@ html, body{ height: 100%; }
   /** Types */
   /**
    * @typedef {{id:string, text:string, done:boolean, children:Array<ItemState>}} ItemState
-   * @typedef {{id:string, title:string, layout:"vertical"|"horizontal", items:Array<ItemState>}} ListState
+   * @typedef {{id:string, title:string, color:string, alpha:number, layout:"vertical"|"horizontal", items:Array<ItemState>}} ListState
    */
 
   function makeId() {
@@ -959,8 +1113,128 @@ html, body{ height: 100%; }
   }
 
   function makeList(title) {
-    return { id: makeId(), order: 0, title: String(title || "Liste"), layout: "vertical", items: [] };
+    return { id: makeId(), order: 0, title: String(title || "Liste"), color: pickListColorForTheme(state.theme), alpha: DEFAULT_LIST_ALPHA, layout: "vertical", items: [] };
   }
+
+  // List color helpers
+
+  function normalizeAlpha(a) {
+    const n = Number(a);
+    if (!Number.isFinite(n)) return DEFAULT_LIST_ALPHA;
+    // clamp [0.05..1] to avoid invisible cards; keep user intent
+    return Math.min(1, Math.max(0.05, n));
+  }
+
+  function hexToRgb(hex) {
+    const v = normalizeHexColor(hex);
+    if (!v) return { r: 255, g: 255, b: 255 };
+    const n = parseInt(v.slice(1), 16);
+    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  }
+
+  const LIST_COLORS_LIGHT = [
+    "#ffe7ee", "#e8f0ff", "#e7fff3", "#fff2d9", "#f1e8ff",
+    "#e6fff9", "#ffeede", "#eaf7ff", "#f6ffe6", "#fff0f6",
+    "#e9f1ff", "#eafff0"
+  ];
+  const LIST_COLORS_DARK = [
+    "#1a2438", "#132a2a", "#2a1530", "#2b1d16", "#1b2a44",
+    "#162b1f", "#2b1642", "#2b2a16", "#16203a", "#2a1630",
+    "#16302a", "#20162b"
+  ];
+
+  function isHexColor(s) {
+    return typeof s === "string" && /^#([0-9a-fA-F]{6})$/.test(s.trim());
+  }
+
+  function normalizeHexColor(s) {
+    const v = String(s || "").trim();
+    if (/^#([0-9a-fA-F]{6})$/.test(v)) return v.toLowerCase();
+    return "";
+  }
+
+  function pickListColorForTheme(theme) {
+    const pal = (theme === "dark") ? LIST_COLORS_DARK : LIST_COLORS_LIGHT;
+    return pal[Math.floor(Math.random() * pal.length)];
+  }
+
+
+// Nested item gradient helpers (depth-based)
+function clamp01(n) {
+  const x = Number(n);
+  if (!Number.isFinite(x)) return 0;
+  return Math.min(1, Math.max(0, x));
+}
+
+// Depth: 1 = root item, 2 = child item, ...
+// Idea: "kademe düşür" => same base color but reduced alpha per depth.
+// Theme effect comes from underlying background (alpha blending).
+function itemBgGradient(list, depth) {
+  const rgb = hexToRgb(list.color);
+  const baseA = normalizeAlpha(list.alpha);
+
+  // Root items are noticeably softer than the list card itself.
+  const depthSafe = Math.max(1, Math.trunc(Number(depth) || 1));
+
+  const startMul = 0.45;            // depth 1 multiplier
+  const stepMul  = 0.75;            // each deeper level reduces intensity
+  const m = startMul * Math.pow(stepMul, depthSafe - 1);
+
+  const aTop = Math.min(baseA, Math.max(0.05, baseA * m));
+  const aBot = Math.min(baseA, Math.max(0.05, baseA * m * 0.78));
+
+  return `linear-gradient(180deg, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${aTop}), rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${aBot}))`;
+}
+
+
+
+
+// Import helpers (signature + cloning)
+// Eşdeğerlik: liste başlığı + madde metinleri (+ alt görev ağacı) aynıysa aynıdır.
+// Not: id/order/done (checkbox) durumları eşdeğerlikte dikkate alınmaz. (Renk artık eşdeğerlikte dikkate alınır.)
+function normSigText(s) {
+  return String(s ?? "").replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
+}
+
+function itemsSignature(items) {
+  if (!Array.isArray(items)) return [];
+  return items.map(it => ({
+    t: normSigText(it && it.text),
+    c: itemsSignature(it && it.children)
+  }));
+}
+
+function listSignature(list) {
+  const title = normSigText(list && list.title);
+  const items = itemsSignature(list && list.items);
+    const color = normalizeHexColor(list && list.color);
+  const alpha = normalizeAlpha(list && list.alpha);
+  return JSON.stringify({ title, color, alpha, items });
+}
+
+function cloneItemsWithFreshIds(items) {
+  if (!Array.isArray(items)) return [];
+  return items.map(it => ({
+    id: makeId(),
+    order: 0,
+    text: String((it && it.text) || ""),
+    done: !!(it && it.done),
+    children: cloneItemsWithFreshIds(it && it.children)
+  }));
+}
+
+function cloneListWithFreshIds(list) {
+  return {
+    id: makeId(),
+    order: 0,
+    title: String((list && list.title) || "Liste"),
+    color: normalizeHexColor(list && list.color) || pickListColorForTheme(state.theme),
+    alpha: normalizeAlpha(list && list.alpha),
+    layout: (list && (list.layout === "horizontal" || list.layout === "vertical")) ? list.layout : "vertical",
+    items: cloneItemsWithFreshIds(list && list.items)
+  };
+}
+
 
   function findList(listId) {
     return state.lists.find(l => l.id === listId) || null;
@@ -1140,8 +1414,14 @@ html, body{ height: 100%; }
 
     for (let listIdx = 0; listIdx < state.lists.length; listIdx++) {
       const list = state.lists[listIdx];
+      if (!isHexColor(list.color)) list.color = pickListColorForTheme(state.theme);
+      if (!Number.isFinite(Number(list.alpha))) list.alpha = DEFAULT_LIST_ALPHA;
       const card = document.createElement("div");
       card.className = "list-card";
+            const a = normalizeAlpha(list.alpha);
+      if (a !== list.alpha) list.alpha = a;
+      const rgb = hexToRgb(list.color);
+      card.style.setProperty("--list-bg", `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${list.alpha})`);
 
       const itemCount = countItems(list.items);
       const doneCount = countDoneItems(list.items);
@@ -1151,14 +1431,21 @@ html, body{ height: 100%; }
           <div class="list-title">
             <div class="order-wrap" title="Liste sırası">
               <span class="order-tag">#</span>
-              <input class="order-input"
-                     type="number"
-                     min="1"
-                     step="1"
-                     inputmode="numeric"
-                     data-role="listOrder"
-                     data-list-id="${esc(list.id)}"
-                     value="${escAttr(String(list.order || (listIdx + 1)))}" />
+              <div class="num">
+                <input class="order-input"
+                       type="number"
+                       min="1"
+                       step="1"
+                       inputmode="numeric"
+                       data-role="listOrder"
+                       data-list-id="${esc(list.id)}"
+                       value="${escAttr(String(list.order || (listIdx + 1)))}" />
+                <div class="num-spin" aria-label="Sıra değiştir">
+ 
+                  <button type="button" class="spin-btn" data-action="spinDown" data-list-id="${esc(list.id)}" aria-label="Azalt">▲</button>
+                 <button type="button" class="spin-btn" data-action="spinUp" data-list-id="${esc(list.id)}" aria-label="Arttır">▼</button>
+                </div>
+              </div>
             </div>
             <textarea class="title-input autosize" rows="1" data-role="listTitle" data-list-id="${esc(list.id)}">${esc(list.title)}</textarea>
           </div>
@@ -1166,7 +1453,10 @@ html, body{ height: 100%; }
             <span class="pill">${doneCount}/${itemCount} tamam</span>
             <button class="mini del" data-action="deleteList" data-list-id="${esc(list.id)}">Listeyi Sil</button>
           </div>
-        </div>
+            <div class="list-color" title="Liste rengi">
+              <input type="color" class="color-input" data-role="listColor" data-list-id="${esc(list.id)}" value="${escAttr(list.color)}" aria-label="Liste rengi" />
+            </div>
+          </div>
 
         <div class="list-add">
           <input class="add-input" placeholder="Yeni madde yaz ve Enter…" data-role="addRoot" data-list-id="${esc(list.id)}" />
@@ -1174,7 +1464,7 @@ html, body{ height: 100%; }
         </div>
 
         <div class="list-body">
-          ${renderItems(list, list.items, list.layout, true)}
+          ${renderItems(list, list.items, list.layout, true, 1)}
         </div>
       `;
 
@@ -1188,7 +1478,7 @@ html, body{ height: 100%; }
     updateMeta();
   }
 
-  function renderItems(list, items, layout, isRoot) {
+  function renderItems(list, items, layout, isRoot, depth) {
     if (!items || items.length === 0) {
       return `<div class="empty">${isRoot ? "Henüz madde yok." : "Alt görev yok."}</div>`;
     }
@@ -1196,28 +1486,37 @@ html, body{ height: 100%; }
     const cls = isRoot ? "items" : "children";
     const ulClass = `${cls} ${layout}`;
 
-    const liHtml = items.map((it, idx) => renderItem(list, it, layout, idx)).join("");
+    const d = Math.max(1, Math.trunc(Number(depth) || 1));
+
+    const liHtml = items.map((it, idx) => renderItem(list, it, layout, idx, d)).join("");
     return `<ul class="${ulClass}">${liHtml}</ul>`;
   }
 
-  function renderItem(list, item, layout, idx) {
+  function renderItem(list, item, layout, idx, depth) {
     const st = getTriState(item);
     const textCls = st.strike ? "text done" : "text";
 
     const hasChildren = item.children && item.children.length > 0;
+    const itemBg = itemBgGradient(list, depth);
 
     return `
-      <li class="item" data-item-wrap="${esc(item.id)}">
+      <li class="item" style="--item-bg: ${itemBg};" data-item-wrap="${esc(item.id)}">
         <div class="item-row">
-          <input class="order-input item-order"
-                 type="number"
-                 min="1"
-                 step="1"
-                 inputmode="numeric"
-                 data-role="itemOrder"
-                 data-list-id="${esc(list.id)}"
-                 data-item-id="${esc(item.id)}"
-                 value="${escAttr(String(item.order || (idx + 1)))}" />
+          <div class="num">
+            <input class="order-input item-order"
+                   type="number"
+                   min="1"
+                   step="1"
+                   inputmode="numeric"
+                   data-role="itemOrder"
+                   data-list-id="${esc(list.id)}"
+                   data-item-id="${esc(item.id)}"
+                   value="${escAttr(String(item.order || (idx + 1)))}" />
+            <div class="num-spin" aria-label="Sıra değiştir">
+         <button type="button" class="spin-btn" data-action="spinDown" data-list-id="${esc(list.id)}" data-item-id="${esc(item.id)}" aria-label="Azalt">▲</button>
+              <button type="button" class="spin-btn" data-action="spinUp" data-list-id="${esc(list.id)}" data-item-id="${esc(item.id)}" aria-label="Arttır">▼</button>
+            </div>
+          </div>
           <input class="ck"
                  type="checkbox"
                  data-role="itemCk"
@@ -1232,7 +1531,7 @@ html, body{ height: 100%; }
           <button class="mini del" data-action="deleteItem" data-list-id="${esc(list.id)}" data-item-id="${esc(item.id)}">Sil</button>
         </div>
 
-        ${renderItems(list, item.children, layout, false)}
+        ${renderItems(list, item.children, layout, false, depth + 1)}
       </li>
     `;
   }
@@ -1301,7 +1600,7 @@ html, body{ height: 100%; }
       version: VERSION,
       updatedAt: Number(obj.updatedAt || Date.now()),
       theme: nextTheme,
-      lists: Array.isArray(obj.lists) ? sortByOrder(obj.lists.map((x, i) => normalizeList(x, i + 1))) : []
+      lists: Array.isArray(obj.lists) ? sortByOrder(obj.lists.map((x, i) => normalizeList(x, i + 1, nextTheme))) : []
     };
 
     if (ver > VERSION) {
@@ -1310,7 +1609,7 @@ html, body{ height: 100%; }
     return next;
   }
 
-  function normalizeList(l, fallbackOrder) {
+  function normalizeList(l, fallbackOrder, theme) {
     const id = (l && typeof l.id === "string") ? l.id : makeId();
     const title = (l && typeof l.title === "string") ? l.title : "Liste";
     const layout = "vertical";
@@ -1318,10 +1617,13 @@ html, body{ height: 100%; }
     const orderNum = (l && Number.isFinite(Number(l.order))) ? Math.trunc(Number(l.order)) : Number(fallbackOrder || 0);
     const order = (orderNum > 0) ? orderNum : 0;
 
+    const color = normalizeHexColor(l && l.color) || pickListColorForTheme(theme);
+    const alpha = normalizeAlpha(l && l.alpha);
+
     let items = (l && Array.isArray(l.items)) ? l.items.map((x, i) => normalizeItem(x, i + 1)) : [];
     items = sortByOrder(items);
 
-    return { id, order, title, layout, items };
+    return { id, order, title, color, alpha, layout, items };
   }
 
   function normalizeItem(it, fallbackOrder) {
