@@ -4,7 +4,7 @@
 Tarayıcıda çalışan, iç içe (nested) görevler destekleyen minimal bir to-do uygulaması. Kurulum gerektirmez; tek bir `index.html` dosyasıyla çalışır.
 
 Canlı sürüm:
-- https://cuneytinan.github.io/todo-minimal/
+- https://cuneytinann.github.io/todo-minimal/
 
 ## Özellikler
 
@@ -50,3 +50,4 @@ Not: Gizli mod veya sıkı gizlilik ayarlarında Local Storage kısıtlıysa oto
 ## Gizlilik
 
 Veri yalnızca yerel tarayıcıda tutulur. Sunucuya gönderim yoktur (tek statik sayfa).
+
