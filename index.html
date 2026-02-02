@@ -418,10 +418,12 @@
 
     .num-spin {
       position: absolute;
-      right: 0.1875rem;
-      bottom: 0.2rem;
+      right: 0.2rem;
+      top: 0.125rem;
+      bottom: 0.125rem;
       width: 1.3rem;
       display: flex;
+      justify-content: center;
       flex-direction: column;
       gap: 0.125rem;
       pointer-events: none;
@@ -1606,7 +1608,7 @@
 
       function renderItems(list, items, layout, isRoot, depth) {
         if (!items || items.length === 0) {
-          return `<div class="empty">${isRoot ? "Henüz madde yok." : "Alt görev yok."}</div>`;
+          return isRoot ? `<div class="empty">Henüz madde yok.</div>` : "";
         }
 
         const cls = isRoot ? "items" : "children";
